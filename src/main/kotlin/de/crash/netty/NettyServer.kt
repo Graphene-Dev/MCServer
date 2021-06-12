@@ -27,5 +27,9 @@ fun startNettyServer(): ChannelFuture? {
         println("This address or port is already in use!\nStacktrace:")
         ex.printStackTrace()
         null
+    }catch (ex: Exception) {
+        println("THIS IS A BUG, REPORT IT TO THE DEVS (https://github.com/Crashcrafter/MCServer/issues/new) WITH THE FOLLOWING STACKTRACE:")
+        ex.printStackTrace()
+        null
     }
 }
