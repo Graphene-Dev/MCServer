@@ -7,7 +7,8 @@
 [Crashcrafter](https://github.com/Crashcrafter) | 
 [JuDev](https://github.com/Jahid06) | 
 [JosuaDev](https://github.com/JosuaDev) | 
-[RenaxDev](https://github.com/renaxdev) | 
+[RenaxDev](https://github.com/renaxdev) |
+[Geckobyte](https://github.com/Geckobyte)
 
 #### About this Project
 We are planning to do a Minecraft Server written in Kotlin

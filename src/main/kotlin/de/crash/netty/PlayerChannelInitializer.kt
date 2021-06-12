@@ -1,4 +1,4 @@
-package netty
+package de.crash.netty
 
 import io.netty.channel.Channel
 import io.netty.channel.ChannelInitializer

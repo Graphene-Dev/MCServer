@@ -14,9 +14,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-netty:1.6.0")
-    implementation("io.ktor:ktor-network:1.6.0")
     implementation("io.netty:netty-all:4.1.44.Final")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
     implementation(kotlin("stdlib"))
 }
 
@@ -29,5 +28,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("de.crash.MainKt")
 }
