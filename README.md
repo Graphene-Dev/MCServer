@@ -4,10 +4,10 @@
 
 ### Developer Team
 
-[Crashcrafter](https://github.com/Crashcrafter)
-[JuDev](https://github.com/Jahid06)
-[JosuaDev](https://github.com/JosuaDev)
-[RenaxDev](https://github.com/renaxdev)
+[Crashcrafter](https://github.com/Crashcrafter) | 
+[JuDev](https://github.com/Jahid06) | 
+[JosuaDev](https://github.com/JosuaDev) | 
+[RenaxDev](https://github.com/renaxdev) | 
 
 #### About this Project
 We are planning to do a Minecraft Server written in Kotlin
