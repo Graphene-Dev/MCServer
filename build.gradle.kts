@@ -27,5 +27,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("mainKt")
+    mainClass.set("MainKt")
 }
