@@ -13,12 +13,16 @@ class PlayerChannelInboundHandler : SimpleChannelInboundHandler<Any>() {
         val bytes = ByteArray(buf.readableBytes())
         buf.readBytes(bytes)
         println(bytes.toString(Charset.defaultCharset()))
-        val cf = ctx!!.writeAndFlush(Unpooled.copiedBuffer("Test", Charset.defaultCharset()))
-        cf.addListener(ChannelFutureListener.CLOSE)
+
     }
 
     override fun channelActive(ctx: ChannelHandlerContext?) {
         super.channelActive(ctx)
         println("Channel connected -> " + ctx!!.channel())
+    }
+
+    override fun channelUnregistered(ctx: ChannelHandlerContext?) {
+        super.channelUnregistered(ctx)
+        println("Channel ${ctx!!.channel()} disconnected!")
     }
 }
