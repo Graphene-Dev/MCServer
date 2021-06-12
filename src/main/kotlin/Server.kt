@@ -3,30 +3,14 @@ import io.ktor.network.sockets.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.*
+import netty.startNettyServer
 import java.net.InetSocketAddress
 import java.nio.charset.Charset
-import java.util.concurrent.Executors
 
 suspend fun main(args: Array<String>) {
-    GlobalScope.launch { testServerNetty() }
+    GlobalScope.launch { startNettyServer() }
     delay(1000)
     testClient()
-}
-
-suspend fun testServer() {
-    println("Server is starting...")
-    //Handle Args
-    val server = aSocket(ActorSelectorManager(Executors.newCachedThreadPool().asCoroutineDispatcher())).tcp().bind(InetSocketAddress("127.0.0.1", 25565))
-    while (true) {
-        val socket = server.accept()
-        println(socket.remoteAddress)
-        val input = socket.openReadChannel()
-        val output = socket.openWriteChannel(autoFlush = true)
-        val line = input.readUTF8Line()
-
-        println("received '$line' from ${socket.remoteAddress}")
-        output.writeFully("$line back\r\n".toByteArray())
-    }
 }
 
 suspend fun testClient() {
