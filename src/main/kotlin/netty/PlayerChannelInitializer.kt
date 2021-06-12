@@ -1,6 +1,7 @@
 package netty
 
-import io.netty.channel.*
+import io.netty.channel.Channel
+import io.netty.channel.ChannelInitializer
 
 class PlayerChannelInitializer : ChannelInitializer<Channel>() {
     override fun initChannel(ch: Channel?) {
