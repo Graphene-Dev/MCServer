@@ -1,5 +1,6 @@
 package de.crash.netty
 
+import de.crash.netty.packets.handle
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelFutureListener
@@ -13,7 +14,7 @@ class PlayerChannelInboundHandler : SimpleChannelInboundHandler<Any>() {
         val bytes = ByteArray(buf.readableBytes())
         buf.readBytes(bytes)
         println(bytes.toString(Charset.defaultCharset()))
-
+        ctx!!.handle(bytes)
     }
 
     override fun channelActive(ctx: ChannelHandlerContext?) {

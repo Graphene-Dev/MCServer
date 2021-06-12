@@ -6,6 +6,6 @@ import io.netty.channel.Channel
 
 class HandshakeHandler : PacketHandler {
     override fun handle(channel: Channel, packet: Packet) {
-        //TODO: Handle Handshake
+        println("Handshake")
     }
 }

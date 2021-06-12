@@ -21,6 +21,7 @@ fun ChannelHandlerContext.handle(bytes: ByteArray) {
     val packet = Packet(bytes)
     val length = packet.readInt()
     val packedId = packet.readInt()
+    println(packedId)
     val status = statusMap[channel().id().asLongText()] ?: ClientStatus.HANDSHAKE.ordinal
     packetHandlers[status]!![packedId]!!.handle(channel(), packet)
 }

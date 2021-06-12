@@ -8,6 +8,7 @@ data class PropertiesObj(val port: Int, val server_ip: String)
 
 private val defaultConfig = PropertiesObj(25565, "127.0.0.1")
 var Config: PropertiesObj = defaultConfig
+const val protocolId = 755
 
 fun loadConfig(){
     val file = File("properties.json")

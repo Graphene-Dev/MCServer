@@ -1,6 +1,7 @@
 package de.crash.netty.packets
 
 import java.nio.charset.Charset
+import kotlin.experimental.and
 
 
 class Packet() {
@@ -51,6 +52,16 @@ class Packet() {
     //endregion
 
     //region Read Functions
+    fun readByte(): Byte {
+        if(bytes.size > readPos) {
+            val value = bytes[readPos]
+            readPos++
+            return value
+        }else {
+            throw CouldNotReadValueOfTypeException("Byte")
+        }
+    }
+
     fun readBytes(length: Int): ByteArray {
         if(bytes.size > readPos){
             val value = bytes.copyOfRange(readPos, readPos + length)
@@ -72,29 +83,35 @@ class Packet() {
     }
 
     fun readInt(): Int {
-        if(bytes.size > readPos){
-            val value = ((0xff and bytes[readPos].toInt()) shl 56 or ((0xff and bytes[readPos + 1].toInt()) shl 48
-                    ) or ((0xff and bytes[readPos + 2].toInt()) shl 40) or ((0xff and bytes[readPos + 3].toInt()) shl 32))
-            readPos += 4
-            return value
-        }else {
-            throw CouldNotReadValueOfTypeException("Int")
-        }
+        var numRead = 0
+        var result = 0
+        var read: Byte
+        do {
+            read = readByte()
+            val value: Int = (read and 127).toInt()
+            result = result or (value shl 7 * numRead)
+            numRead++
+            if (numRead > 5) {
+                throw RuntimeException("VarInt is too big")
+            }
+        } while (read and 128.toByte() != 0.toByte())
+        return result
     }
 
     fun readLong(): Long {
-        if(bytes.size > readPos){
-            val value =  ((0xff and bytes[readPos].toInt()).toLong() shl 56 or ((0xff and bytes[readPos + 1].toInt()).toLong() shl 48
-                    ) or ((0xff and bytes[readPos + 2].toInt()).toLong() shl 40
-                    ) or ((0xff and bytes[readPos + 3].toInt()).toLong() shl 32
-                    ) or ((0xff and bytes[readPos + 4].toInt()).toLong() shl 24
-                    ) or ((0xff and bytes[readPos + 5].toInt()).toLong() shl 16
-                    ) or ((0xff and bytes[readPos + 6].toInt()).toLong() shl 8) or ((0xff and bytes[readPos + 7].toInt()).toLong() shl 0))
-            readPos += 8
-            return value
-        }else {
-            throw CouldNotReadValueOfTypeException("Long")
-        }
+        var numRead = 0
+        var result: Long = 0
+        var read: Byte
+        do {
+            read = readByte()
+            val value = (read and 127).toLong()
+            result = result or (value shl 7 * numRead)
+            numRead++
+            if (numRead > 10) {
+                throw RuntimeException("VarLong is too big")
+            }
+        } while (read and 128.toByte() != 0.toByte())
+        return result
     }
 
     fun readFloat(): Float {
