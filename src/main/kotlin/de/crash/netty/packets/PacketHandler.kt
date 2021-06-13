@@ -1,6 +1,7 @@
 package de.crash.netty.packets
 
 import de.crash.netty.packets.handshake.HandshakeHandler
+import de.crash.netty.packets.status.PingHandler
 import io.netty.channel.Channel
 import io.netty.channel.ChannelHandlerContext
 
@@ -15,6 +16,9 @@ fun initPacketHandlers(){
     val handShakeMap = HashMap<Int, PacketHandler>()
     handShakeMap[0] = HandshakeHandler()
     packetHandlers[0] = handShakeMap
+    val statusPacketMap = HashMap<Int, PacketHandler>()
+    statusPacketMap[1] = PingHandler()
+    packetHandlers[1] = statusPacketMap
 }
 
 fun ChannelHandlerContext.handle(bytes: ByteArray) {
