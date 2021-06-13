@@ -12,6 +12,8 @@ class Packet() {
         write(id)
     }
 
+    constructor(type: PacketType): this(type.id)
+
     constructor(bytes: ByteArray): this() {
         this.bytes = bytes
     }

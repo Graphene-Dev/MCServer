@@ -1,5 +1,7 @@
 package de.crash.netty.packets
 
+import de.crash.netty.ClientStatus
+import de.crash.netty.NettyClient
 import de.crash.netty.packets.handshake.HandshakeHandler
 import de.crash.netty.packets.login.LoginStartHandler
 import de.crash.netty.packets.status.PingHandler
@@ -13,20 +15,20 @@ interface PacketHandler {
     fun handle(channel: Channel, packet: Packet)
 }
 
-val packetHandlers = hashMapOf<Int, HashMap<Int, PacketHandler>>()
-val statusMap = hashMapOf<String, Int>()
+val packetHandlers = hashMapOf<ClientStatus, HashMap<Int, PacketHandler>>()
+val nettyPlayers = hashMapOf<Channel, NettyClient>()
 
 fun initPacketHandlers(){
     val handShakePacketMap = HashMap<Int, PacketHandler>()
     handShakePacketMap[0] = HandshakeHandler()
-    packetHandlers[0] = handShakePacketMap
+    packetHandlers[ClientStatus.HANDSHAKE] = handShakePacketMap
     val statusPacketMap = HashMap<Int, PacketHandler>()
     statusPacketMap[0] = RequestHandler()
     statusPacketMap[1] = PingHandler()
-    packetHandlers[1] = statusPacketMap
-    val playPacketMap = HashMap<Int, PacketHandler>()
-    playPacketMap[0] = LoginStartHandler()
-    packetHandlers[2] = playPacketMap
+    packetHandlers[ClientStatus.STATUS] = statusPacketMap
+    val loginPacketMap = HashMap<Int, PacketHandler>()
+    loginPacketMap[0] = LoginStartHandler()
+    packetHandlers[ClientStatus.LOGIN] = loginPacketMap
 }
 
 fun ChannelHandlerContext.handle(bytes: ByteArray) {
@@ -34,11 +36,11 @@ fun ChannelHandlerContext.handle(bytes: ByteArray) {
     while (packet.bytes.size > packet.readPos){
         val length = packet.readVarInt()
         val packedId = packet.readVarInt()
-        val status = statusMap[channel().id().asLongText()] ?: ClientStatus.HANDSHAKE.ordinal
+        val state = nettyPlayers[channel()]?.state ?: ClientStatus.HANDSHAKE
         try {
-            packetHandlers[status]!![packedId]!!.handle(channel(), packet)
+            packetHandlers[state]!![packedId]!!.handle(channel(), packet)
         }catch (ex: NullPointerException) {
-            println("Unhandled Packet with id $packedId, status $status:")
+            println("Unhandled Packet with id $packedId, status ${state.name}:")
             ex.printStackTrace()
             break
         }

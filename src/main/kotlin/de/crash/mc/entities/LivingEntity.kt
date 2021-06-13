@@ -1,4 +1,5 @@
 package de.crash.mc.entities
 
-class LivingEntity {
+interface LivingEntity : Entity {
+    val entityType: EntityType
 }

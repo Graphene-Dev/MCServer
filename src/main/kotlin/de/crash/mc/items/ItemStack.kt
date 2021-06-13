@@ -1,4 +1,4 @@
 package de.crash.mc.items
 
-class Item {
+class ItemStack {
 }

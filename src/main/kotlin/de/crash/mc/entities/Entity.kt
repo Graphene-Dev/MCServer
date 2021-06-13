@@ -1,4 +1,4 @@
 package de.crash.mc.entities
 
-class Entity {
+interface Entity {
 }
