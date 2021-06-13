@@ -1,4 +1,4 @@
-package de.crash.mc
+package de.crash.util
 
 import java.math.BigInteger
 import java.security.MessageDigest
