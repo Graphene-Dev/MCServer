@@ -14,7 +14,7 @@ class HandshakeHandler : PacketHandler {
         val newState = packet.readVarInt()
         statusMap[channel.id().asLongText()] = newState
         if(newState == 1) {
-            Response().sendPacket(channel)
+            println("Start Status")
         }else {
             println("Start Login")
             //TODO: Start Login

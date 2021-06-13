@@ -15,8 +15,8 @@ class Packet() {
     }
 
     val byteBuffer = mutableListOf<Byte>()
-    private var bytes: ByteArray = ByteArray(0)
-    private var readPos = 0
+    var bytes: ByteArray = ByteArray(0)
+    var readPos = 0
 
     //region Write Functions
     fun write(value: Byte) {
