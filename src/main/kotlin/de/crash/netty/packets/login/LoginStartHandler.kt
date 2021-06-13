@@ -1,4 +1,4 @@
-package de.crash.netty.packets.play
+package de.crash.netty.packets.login
 
 import de.crash.mojangapi.getUUIDofUsername
 import de.crash.netty.packets.Packet

@@ -1,7 +1,7 @@
 package de.crash.netty.packets
 
 import de.crash.netty.packets.handshake.HandshakeHandler
-import de.crash.netty.packets.play.LoginStartHandler
+import de.crash.netty.packets.login.LoginStartHandler
 import de.crash.netty.packets.status.PingHandler
 import de.crash.netty.packets.status.RequestHandler
 import io.netty.buffer.Unpooled

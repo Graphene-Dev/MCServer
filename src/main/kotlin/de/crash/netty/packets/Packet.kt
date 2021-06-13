@@ -1,5 +1,6 @@
 package de.crash.netty.packets
 
+import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.*
 import kotlin.experimental.and
@@ -33,27 +34,11 @@ class Packet() {
     }
 
     fun write(value: Int) {
-        var bvalue = value
-        do {
-            var temp = (bvalue and 127).toByte()
-            bvalue = bvalue ushr 7
-            if (bvalue != 0) {
-                temp = temp or 128.toByte()
-            }
-            write(temp)
-        } while (bvalue != 0)
+        byteBuffer.addAll(value.getBytes())
     }
 
     fun write(value: Long) {
-        var bvalue = value
-        do {
-            var temp = (bvalue and 127).toByte()
-            bvalue = bvalue ushr 7
-            if (bvalue != 0L) {
-                temp = temp or 128.toByte()
-            }
-            write(temp)
-        } while (bvalue != 0L)
+        byteBuffer.addAll(value.getBytes())
     }
 
     fun write(value: Float) {
@@ -71,8 +56,7 @@ class Packet() {
     }
 
     fun write(value: UUID) {
-        write(value.mostSignificantBits)
-        write(value.leastSignificantBits)
+        write(value.getBytes())
     }
     //endregion
 
@@ -196,4 +180,32 @@ fun Int.getBytes(): MutableList<Byte> {
         result.add(temp)
     } while (bvalue != 0)
     return result
+}
+
+fun Long.getBytes(): MutableList<Byte> {
+    var bvalue = this
+    val result = mutableListOf<Byte>()
+    do {
+        var temp = (bvalue and 127).toByte()
+        bvalue = bvalue ushr 7
+        if (bvalue != 0L) {
+            temp = temp or 128.toByte()
+        }
+        result.add(temp)
+    } while (bvalue != 0L)
+    return result
+}
+
+fun UUID.getBytes(): ByteArray {
+    val bb: ByteBuffer = ByteBuffer.wrap(ByteArray(16))
+    bb.putLong(this.mostSignificantBits)
+    bb.putLong(this.leastSignificantBits)
+    return bb.array()
+}
+
+fun getUUIDFromBytes(bytes: ByteArray?): UUID {
+    val byteBuffer: ByteBuffer = ByteBuffer.wrap(bytes)
+    val high: Long = byteBuffer.long
+    val low: Long = byteBuffer.long
+    return UUID(high, low)
 }

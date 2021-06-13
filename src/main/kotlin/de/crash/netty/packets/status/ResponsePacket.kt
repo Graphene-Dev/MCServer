@@ -13,7 +13,7 @@ class ResponsePacket {
     fun sendPacket(channel: Channel){
         val packet = Packet(0)
         val serverStatusObj = ServerStatusObj(ServerStatusVersion(version, protocolId),
-            ServerStatusPlayers(Config.maxPlayers, 2, listOf()),
+            ServerStatusPlayers(Config.maxPlayers.toLong(), 2, listOf()),
             ServerStatusDescription(Config.motd))
         val jsonString = jacksonObjectMapper().writeValueAsString(serverStatusObj)
         packet.write(jsonString)
