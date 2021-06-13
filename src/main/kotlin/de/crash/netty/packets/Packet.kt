@@ -2,6 +2,7 @@ package de.crash.netty.packets
 
 import java.nio.charset.Charset
 import kotlin.experimental.and
+import kotlin.experimental.or
 
 
 class Packet() {
@@ -31,11 +32,27 @@ class Packet() {
     }
 
     fun write(value: Int) {
-        byteBuffer.addAll(value.getBytes().asList())
+        var bvalue = value
+        do {
+            var temp = (bvalue and 127).toByte()
+            bvalue = bvalue ushr 7
+            if (bvalue != 0) {
+                temp = temp or 128.toByte()
+            }
+            write(temp)
+        } while (bvalue != 0)
     }
 
     fun write(value: Long) {
-        byteBuffer.addAll(value.getBytes().asList())
+        var bvalue = value
+        do {
+            var temp = (bvalue and 127).toByte()
+            bvalue = bvalue ushr 7
+            if (bvalue != 0L) {
+                temp = temp or 128.toByte()
+            }
+            write(temp)
+        } while (bvalue != 0L)
     }
 
     fun write(value: Float) {
@@ -47,7 +64,9 @@ class Packet() {
     }
 
     fun write(value: String) {
-        byteBuffer.addAll(value.toByteArray().asList())
+        val bytes = value.toByteArray().asList()
+        write(bytes.size)
+        byteBuffer.addAll(bytes)
     }
     //endregion
 
@@ -82,7 +101,7 @@ class Packet() {
         }
     }
 
-    fun readInt(): Int {
+    fun readVarInt(): Int {
         var numRead = 0
         var result = 0
         var read: Byte
@@ -98,7 +117,7 @@ class Packet() {
         return result
     }
 
-    fun readLong(): Long {
+    fun readVarLong(): Long {
         var numRead = 0
         var result: Long = 0
         var read: Byte
@@ -116,7 +135,7 @@ class Packet() {
 
     fun readFloat(): Float {
         if(bytes.size > readPos) {
-            return Float.fromBits(readInt())
+            return Float.fromBits(readVarInt())
         }else {
             throw CouldNotReadValueOfTypeException("Float")
         }
@@ -134,7 +153,7 @@ class Packet() {
 
     fun readString(): String {
         if(bytes.size > readPos) {
-            val length = readInt()
+            val length = readVarInt()
             val value = String(bytes, readPos, length, Charset.defaultCharset())
             readPos += length
             return value
@@ -147,7 +166,7 @@ class Packet() {
     fun getPacketBytes(): ByteArray {
         val lengthBytes = byteBuffer.size.getBytes()
         val packetBytes = mutableListOf<Byte>()
-        packetBytes.addAll(lengthBytes.asList())
+        packetBytes.addAll(lengthBytes)
         packetBytes.addAll(byteBuffer)
         return packetBytes.toByteArray()
     }
@@ -159,13 +178,16 @@ class CouldNotReadValueOfTypeException(type: String) : Throwable() {
 
 fun Short.getBytes(): ByteArray = byteArrayOf((this.toInt() ushr 8).toByte(), this.toByte())
 
-fun Int.getBytes(): ByteArray = byteArrayOf(
-    (this ushr 24).toByte(), (this ushr 16).toByte(),
-    (this ushr 8).toByte(), this.toByte()
-)
-
-fun Long.getBytes() = byteArrayOf(
-    (this ushr 56).toByte(), (this ushr 48).toByte(),
-    (this ushr 40).toByte(), (this ushr 32).toByte(), (this ushr 24).toByte(),
-    (this ushr 16).toByte(), (this ushr 8).toByte(), this.toByte()
-)
+fun Int.getBytes(): MutableList<Byte> {
+    var bvalue = this
+    val result = mutableListOf<Byte>()
+    do {
+        var temp = (bvalue and 127).toByte()
+        bvalue = bvalue ushr 7
+        if (bvalue != 0) {
+            temp = temp or 128.toByte()
+        }
+        result.add(temp)
+    } while (bvalue != 0)
+    return result
+}

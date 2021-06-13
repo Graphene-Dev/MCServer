@@ -19,9 +19,14 @@ fun initPacketHandlers(){
 
 fun ChannelHandlerContext.handle(bytes: ByteArray) {
     val packet = Packet(bytes)
-    val length = packet.readInt()
-    val packedId = packet.readInt()
+    val length = packet.readVarInt()
+    val packedId = packet.readVarInt()
     println(packedId)
     val status = statusMap[channel().id().asLongText()] ?: ClientStatus.HANDSHAKE.ordinal
-    packetHandlers[status]!![packedId]!!.handle(channel(), packet)
+    try {
+        packetHandlers[status]!![packedId]!!.handle(channel(), packet)
+    }catch (ex: NullPointerException) {
+        println("Unhandled Packet with id $packedId, status $status:")
+        ex.printStackTrace()
+    }
 }
