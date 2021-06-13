@@ -17,7 +17,6 @@ class HandshakeHandler : PacketHandler {
             println("Start Status")
         }else {
             println("Start Login")
-            //TODO: Start Login
         }
     }
 }

@@ -1,1 +1,1 @@
-{"port":25565,"server_ip":"127.0.0.1"}
+{"port":25565,"server_ip":"127.0.0.1", "online_mode": true, "pvp": true, "maxPlayers": 50, "whitelist": false, "motd": "This is a test server"}
