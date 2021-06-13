@@ -13,7 +13,6 @@ class PlayerChannelInboundHandler : SimpleChannelInboundHandler<Any>() {
         val buf = msg as ByteBuf
         val bytes = ByteArray(buf.readableBytes())
         buf.readBytes(bytes)
-        println(bytes.toString(Charset.defaultCharset()))
         ctx!!.handle(bytes)
     }
 

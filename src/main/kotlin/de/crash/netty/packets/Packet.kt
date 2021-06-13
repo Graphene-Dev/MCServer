@@ -1,6 +1,7 @@
 package de.crash.netty.packets
 
 import java.nio.charset.Charset
+import java.util.*
 import kotlin.experimental.and
 import kotlin.experimental.or
 
@@ -67,6 +68,11 @@ class Packet() {
         val bytes = value.toByteArray().asList()
         write(bytes.size)
         byteBuffer.addAll(bytes)
+    }
+
+    fun write(value: UUID) {
+        write(value.mostSignificantBits)
+        write(value.leastSignificantBits)
     }
     //endregion
 

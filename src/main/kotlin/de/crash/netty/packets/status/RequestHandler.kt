@@ -6,6 +6,6 @@ import io.netty.channel.Channel
 
 class RequestHandler : PacketHandler {
     override fun handle(channel: Channel, packet: Packet) {
-        Response().sendPacket(channel)
+        ResponsePacket().sendPacket(channel)
     }
 }

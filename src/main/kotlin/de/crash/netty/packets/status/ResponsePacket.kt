@@ -4,13 +4,12 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.crash.Config
 import de.crash.json.*
 import de.crash.netty.packets.Packet
+import de.crash.netty.packets.sendPacket
 import de.crash.protocolId
 import de.crash.version
-import io.netty.buffer.Unpooled
 import io.netty.channel.Channel
-import io.netty.channel.ChannelFutureListener
 
-class Response {
+class ResponsePacket {
     fun sendPacket(channel: Channel){
         val packet = Packet(0)
         val serverStatusObj = ServerStatusObj(ServerStatusVersion(version, protocolId),
@@ -18,7 +17,6 @@ class Response {
             ServerStatusDescription(Config.motd))
         val jsonString = jacksonObjectMapper().writeValueAsString(serverStatusObj)
         packet.write(jsonString)
-        val cf = channel.writeAndFlush(Unpooled.copiedBuffer(packet.getPacketBytes()))
-        cf.addListener(ChannelFutureListener.CLOSE)
+        channel.sendPacket(packet)
     }
 }

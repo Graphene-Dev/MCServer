@@ -4,7 +4,9 @@ import de.crash.netty.packets.handshake.HandshakeHandler
 import de.crash.netty.packets.play.LoginStartHandler
 import de.crash.netty.packets.status.PingHandler
 import de.crash.netty.packets.status.RequestHandler
+import io.netty.buffer.Unpooled
 import io.netty.channel.Channel
+import io.netty.channel.ChannelFutureListener
 import io.netty.channel.ChannelHandlerContext
 
 interface PacketHandler {
@@ -32,7 +34,6 @@ fun ChannelHandlerContext.handle(bytes: ByteArray) {
     while (packet.bytes.size > packet.readPos){
         val length = packet.readVarInt()
         val packedId = packet.readVarInt()
-        println(packedId)
         val status = statusMap[channel().id().asLongText()] ?: ClientStatus.HANDSHAKE.ordinal
         try {
             packetHandlers[status]!![packedId]!!.handle(channel(), packet)
@@ -42,4 +43,9 @@ fun ChannelHandlerContext.handle(bytes: ByteArray) {
             break
         }
     }
+}
+
+fun Channel.sendPacket(packet: Packet) {
+    val cf = this.writeAndFlush(Unpooled.copiedBuffer(packet.getPacketBytes()))
+    cf.addListener(ChannelFutureListener.CLOSE)
 }

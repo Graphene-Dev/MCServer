@@ -8,6 +8,6 @@ class PingHandler : PacketHandler {
     override fun handle(channel: Channel, packet: Packet) {
         val payload = packet.readVarLong()
         println("Payload Received: $payload")
-        Pong(payload).sendPacket(channel)
+        PongPacket(payload).sendPacket(channel)
     }
 }
