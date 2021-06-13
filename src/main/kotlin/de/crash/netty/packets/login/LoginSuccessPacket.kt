@@ -1,8 +1,9 @@
 package de.crash.netty.packets.login
 
+import de.crash.mc.entities.entity.Player
 import de.crash.netty.ClientStatus
 import de.crash.netty.packets.Packet
-import de.crash.netty.packets.nettyPlayers
+import de.crash.netty.packets.nettyClients
 import de.crash.netty.packets.play.JoinGamePacket
 import de.crash.netty.packets.sendPacket
 import io.netty.channel.Channel
@@ -14,7 +15,10 @@ class LoginSuccessPacket(val username: String, val uuid: UUID) {
         packet.write(uuid)
         packet.write(username)
         channel.sendPacket(packet)
-        nettyPlayers[channel]!!.state = ClientStatus.PLAY
+        val nettyClient = nettyClients[channel]!!
+        nettyClient.state = ClientStatus.PLAY
+        val player = Player(nettyClient, username, uuid)
+        //Add Player to Server
         JoinGamePacket().sendPacket(channel)
     }
 }

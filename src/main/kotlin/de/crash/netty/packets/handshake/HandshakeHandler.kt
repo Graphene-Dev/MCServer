@@ -3,7 +3,7 @@ package de.crash.netty.packets.handshake
 import de.crash.netty.getStateById
 import de.crash.netty.packets.Packet
 import de.crash.netty.packets.PacketHandler
-import de.crash.netty.packets.nettyPlayers
+import de.crash.netty.packets.nettyClients
 import io.netty.channel.Channel
 
 class HandshakeHandler : PacketHandler {
@@ -12,6 +12,6 @@ class HandshakeHandler : PacketHandler {
         val serverAddress = packet.readString()
         val port = packet.readShort()
         val newState = packet.readVarInt()
-        nettyPlayers[channel]!!.state = getStateById(newState)
+        nettyClients[channel]!!.state = getStateById(newState)
     }
 }

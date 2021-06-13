@@ -9,7 +9,6 @@ import io.netty.channel.Channel
 
 class JoinGamePacket {
     fun sendPacket(channel: Channel) {
-        //Assign Netty Player to Player
         val packet = Packet(26)
         packet.write(63) //Entity ID (EID)
         packet.write(false) //isHardcore

@@ -16,7 +16,7 @@ interface PacketHandler {
 }
 
 val packetHandlers = hashMapOf<ClientStatus, HashMap<Int, PacketHandler>>()
-val nettyPlayers = hashMapOf<Channel, NettyClient>()
+val nettyClients = hashMapOf<Channel, NettyClient>()
 
 fun initPacketHandlers(){
     val handShakePacketMap = HashMap<Int, PacketHandler>()
@@ -36,7 +36,7 @@ fun ChannelHandlerContext.handle(bytes: ByteArray) {
     while (packet.bytes.size > packet.readPos){
         val length = packet.readVarInt()
         val packedId = packet.readVarInt()
-        val state = nettyPlayers[channel()]?.state ?: ClientStatus.HANDSHAKE
+        val state = nettyClients[channel()]?.state ?: ClientStatus.HANDSHAKE
         try {
             packetHandlers[state]!![packedId]!!.handle(channel(), packet)
         }catch (ex: NullPointerException) {
