@@ -1,15 +1,13 @@
 package de.crash.netty.packets.play
 
 import de.crash.Config
-import de.crash.netty.packets.Packet
-import de.crash.netty.packets.getBytes
-import de.crash.netty.packets.sendPacket
+import de.crash.netty.packets.*
 import de.crash.util.sha256
 import io.netty.channel.Channel
 
-class JoinGamePacket {
-    fun sendPacket(channel: Channel) {
-        val packet = Packet(26)
+class JoinGamePacket : SendPacket {
+    override fun sendPacket(channel: Channel) {
+        val packet = Packet(PacketType.JOIN_GAME)
         packet.write(63) //Entity ID (EID)
         packet.write(false) //isHardcore
         packet.write(1.toByte()) //Gamemode: 1 for Creative

@@ -4,14 +4,16 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import de.crash.Config
 import de.crash.json.*
 import de.crash.netty.packets.Packet
+import de.crash.netty.packets.PacketType
+import de.crash.netty.packets.SendPacket
 import de.crash.netty.packets.sendPacket
 import de.crash.protocolId
 import de.crash.version
 import io.netty.channel.Channel
 
-class ResponsePacket {
-    fun sendPacket(channel: Channel){
-        val packet = Packet(0)
+class ResponsePacket : SendPacket {
+    override fun sendPacket(channel: Channel){
+        val packet = Packet(PacketType.RESPONSE)
         val serverStatusObj = ServerStatusObj(ServerStatusVersion(version, protocolId),
             ServerStatusPlayers(Config.maxPlayers.toLong(), 2, listOf()),
             ServerStatusDescription(Config.motd))
