@@ -1,1 +1,1 @@
-{"port":25565,"server_ip":"127.0.0.1", "online_mode": true, "pvp": true, "maxPlayers": 50, "whitelist": false, "motd": "§2 This is a test server in Kotlin | github.com/Crashcrafter/MCServer ", "viewDistance": 8, "defaultWorldName": "world", "defaultGamemode": 1}
+{"port":25565,"server_ip":"127.0.0.1", "online_mode": true, "pvp": true, "maxPlayers": 50, "whitelist": false, "motd": "§2 This is a test server in Kotlin | github.com/Crashcrafter/MCServer", "viewDistance": 8, "defaultWorldName": "world", "defaultGamemode": 1}
