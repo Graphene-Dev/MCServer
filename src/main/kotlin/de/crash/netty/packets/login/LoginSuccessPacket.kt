@@ -11,7 +11,7 @@ import de.crash.netty.packets.sendPacket
 import io.netty.channel.Channel
 import java.util.*
 
-class LoginSuccessPacket(val username: String, val uuid: UUID): SendPacket {
+class LoginSuccessPacket(private val username: String, private val uuid: UUID): SendPacket {
     override fun sendPacket(channel: Channel) {
         val packet = Packet(2)
         packet.write(uuid)

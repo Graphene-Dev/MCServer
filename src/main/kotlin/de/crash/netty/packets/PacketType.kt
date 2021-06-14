@@ -4,6 +4,7 @@ import de.crash.netty.packets.handshake.HandshakeHandler
 import de.crash.netty.packets.login.DisconnectLoginPacket
 import de.crash.netty.packets.login.LoginStartHandler
 import de.crash.netty.packets.login.LoginSuccessPacket
+import de.crash.netty.packets.play.DisconnectPlayPacket
 import de.crash.netty.packets.play.JoinGamePacket
 import de.crash.netty.packets.status.PingStatusHandler
 import de.crash.netty.packets.status.PongStatusPacket
@@ -67,7 +68,7 @@ enum class PacketType(val id: Int, val handler: PacketHandler? = null) {
     SET_COOLDOWN(23),
     PLUGIN_MESSAGE_CLIENTBOUND(24),
     NAMED_SOUND_EFFECT(25),
-    DISCONNECT_PLAY(26),
+    DISCONNECT_PLAY(26, DisconnectPlayPacket()),
     ENTITY_STATUS(27),
     EXPLOSION(28),
     UNLOAD_CHUNK(29),

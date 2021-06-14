@@ -4,9 +4,11 @@ import de.crash.mc.entities.entity.Player
 import io.netty.channel.Channel
 
 object Server {
-    val onlinePlayers: MutableList<Player> = mutableListOf()
+    private val onlinePlayers: MutableList<Player> = mutableListOf()
 
-    private val channelMap: HashMap<Channel, Player> = hashMapOf()
+    fun getOnlinePlayers(): List<Player> = onlinePlayers.toList()
+
+    internal val channelMap: HashMap<Channel, Player> = hashMapOf()
 
     internal fun addPlayer(player: Player){
         onlinePlayers.add(player)
