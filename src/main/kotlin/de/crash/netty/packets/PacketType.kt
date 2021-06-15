@@ -1,17 +1,5 @@
 package de.crash.netty.packets
 
-import de.crash.netty.packets.handshake.HandshakeHandler
-import de.crash.netty.packets.login.DisconnectLoginPacket
-import de.crash.netty.packets.login.LoginStartHandler
-import de.crash.netty.packets.login.LoginSuccessPacket
-import de.crash.netty.packets.play.DisconnectPlayPacket
-import de.crash.netty.packets.play.JoinGamePacket
-import de.crash.netty.packets.status.PingStatusHandler
-import de.crash.netty.packets.status.PongStatusPacket
-import de.crash.netty.packets.status.RequestHandler
-import de.crash.netty.packets.status.ResponsePacket
-import java.util.*
-
 enum class PacketType(val id: Int) {
     // HANDSHAKE
 

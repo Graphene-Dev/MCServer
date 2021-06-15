@@ -4,9 +4,8 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-
-object MCHash {
-    fun hash(str: String): String? {
+internal object MCHash {
+    internal fun hash(str: String): String? {
         return try {
             val digest = digest(str, "SHA-1")
             BigInteger(digest).toString(16)

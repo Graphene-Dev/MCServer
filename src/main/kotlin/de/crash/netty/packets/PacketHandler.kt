@@ -11,18 +11,18 @@ import io.netty.channel.Channel
 import io.netty.channel.ChannelFutureListener
 import io.netty.channel.ChannelHandlerContext
 
-interface PacketHandler
-interface HandlePacket: PacketHandler {
+internal interface PacketHandler
+internal interface HandlePacket: PacketHandler {
     fun handle(channel: Channel, packet: Packet)
 }
-interface SendPacket: PacketHandler {
+internal interface SendPacket: PacketHandler {
     fun sendPacket(channel: Channel)
 }
 
-val packetHandlers = hashMapOf<ClientStatus, HashMap<Int, HandlePacket>>()
-val nettyClients = hashMapOf<Channel, NettyClient>()
+internal val packetHandlers = hashMapOf<ClientStatus, HashMap<Int, HandlePacket>>()
+internal val nettyClients = hashMapOf<Channel, NettyClient>()
 
-fun initPacketHandlers(){
+internal fun initPacketHandlers(){
     val handShakePacketMap = HashMap<Int, HandlePacket>()
     handShakePacketMap[PacketType.HANDSHAKE.id] = HandshakeHandler()
     packetHandlers[ClientStatus.HANDSHAKE] = handShakePacketMap
@@ -35,7 +35,7 @@ fun initPacketHandlers(){
     packetHandlers[ClientStatus.LOGIN] = loginPacketMap
 }
 
-fun ChannelHandlerContext.handle(bytes: ByteArray) {
+internal fun ChannelHandlerContext.handle(bytes: ByteArray) {
     val packet = Packet(bytes)
     while (packet.bytes.size > packet.readPos){
         packet.readVarInt()

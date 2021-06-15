@@ -3,7 +3,7 @@ package de.crash.mojangapi
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.crash.mojangapi.json.*
-import de.crash.mojangapi.json.NameHistoryRespose
+import de.crash.mojangapi.json.NameHistoryResponse
 import de.crash.mojangapi.json.ProfileResponse
 import de.crash.util.post
 import java.net.URL
@@ -19,7 +19,7 @@ object MojangApi {
 
     fun getNameHistory(value: UUID): Map<Long?, String> {
         val response = URL("https://api.mojang.com/user/profiles/${value}/names").readText()
-        val obj = jacksonObjectMapper().readValue<NameHistoryRespose>(response)
+        val obj = jacksonObjectMapper().readValue<NameHistoryResponse>(response)
         val resultMap = mutableMapOf<Long?, String>()
         obj.forEach {
             resultMap[it.changedToAt] = it.name

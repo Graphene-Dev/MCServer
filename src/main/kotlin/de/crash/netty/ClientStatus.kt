@@ -7,7 +7,7 @@ enum class ClientStatus {
     PLAY
 }
 
-fun getStateById(id: Int): ClientStatus = when(id){
+internal fun getStateById(id: Int): ClientStatus = when(id){
     0 -> ClientStatus.HANDSHAKE
     1 -> ClientStatus.STATUS
     2 -> ClientStatus.LOGIN

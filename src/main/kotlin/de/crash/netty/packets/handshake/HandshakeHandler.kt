@@ -9,9 +9,11 @@ import io.netty.channel.Channel
 class HandshakeHandler : HandlePacket {
     override fun handle(channel: Channel, packet: Packet) {
         val protocolVersion = packet.readVarInt()
-        val serverAddress = packet.readString()
-        val port = packet.readShort()
+        packet.readString() // Server IP
+        packet.readShort() // Port
         val newState = packet.readVarInt()
-        nettyClients[channel]!!.state = getStateById(newState)
+        val nettyClient = nettyClients[channel]!!
+        nettyClient.state = getStateById(newState)
+        nettyClient.protocolVersion = protocolVersion
     }
 }

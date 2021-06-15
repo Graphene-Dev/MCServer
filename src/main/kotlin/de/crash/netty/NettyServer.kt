@@ -12,7 +12,7 @@ import java.net.BindException
 
 private val epoll = Epoll.isAvailable()
 
-fun startNettyServer(): ChannelFuture? {
+internal fun startNettyServer(): ChannelFuture? {
     return try {
         ServerBootstrap()
             .group(if(epoll) EpollEventLoopGroup() else NioEventLoopGroup())

@@ -1,6 +1,6 @@
 package de.crash.mojangapi.json
 
-internal class NameHistoryRespose(elements: Collection<NameHistoryElement>) : ArrayList<NameHistoryElement>(elements)
+internal class NameHistoryResponse(elements: Collection<NameHistoryElement>) : ArrayList<NameHistoryElement>(elements)
 
 internal data class NameHistoryElement (
     val name: String,

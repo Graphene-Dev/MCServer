@@ -8,7 +8,7 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import java.nio.charset.Charset
 
-class PlayerChannelInboundHandler : SimpleChannelInboundHandler<Any>() {
+internal class PlayerChannelInboundHandler : SimpleChannelInboundHandler<Any>() {
     override fun channelRead0(ctx: ChannelHandlerContext?, msg: Any?) {
         val buf = msg as ByteBuf
         val bytes = ByteArray(buf.readableBytes())

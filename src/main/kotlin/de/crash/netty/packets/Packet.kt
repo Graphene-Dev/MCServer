@@ -205,7 +205,7 @@ fun UUID.getBytes(): ByteArray {
     return bb.array()
 }
 
-fun getUUIDFromBytes(bytes: ByteArray?): UUID {
+fun getUUIDFromBytes(bytes: ByteArray): UUID {
     val byteBuffer: ByteBuffer = ByteBuffer.wrap(bytes)
     val high: Long = byteBuffer.long
     val low: Long = byteBuffer.long

@@ -4,7 +4,7 @@ import de.crash.netty.packets.initPacketHandlers
 import de.crash.netty.startNettyServer
 import kotlin.system.exitProcess
 
-fun main(args: Array<String>) {
+internal fun main(args: Array<String>) {
     initPacketHandlers()
     println("Loading Configs...")
     loadConfig()
