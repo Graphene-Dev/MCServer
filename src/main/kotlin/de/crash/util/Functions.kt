@@ -1,5 +1,6 @@
 package de.crash.util
 
+import me.nullicorn.nedit.type.NBTCompound
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -42,3 +43,8 @@ fun getCurrentTimeStamp(): String {
     val dateformat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
     return dateformat.format(date).toString()
 }
+
+fun NBTCompound.getInt(key: String): Int = this.getInt(key, 0)
+fun NBTCompound.getByte(key: String): Byte = this.getByte(key, 0)
+fun NBTCompound.getDouble(key: String): Double = this.getDouble(key, 0.0)
+fun NBTCompound.getLong(key: String): Long = this.getLong(key, 0)

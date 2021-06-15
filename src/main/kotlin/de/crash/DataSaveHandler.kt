@@ -2,9 +2,10 @@ package de.crash
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import de.crash.util.getCurrentTimeStamp
+import de.crash.util.*
 import me.nullicorn.nedit.NBTReader
 import java.io.File
+import java.util.*
 
 fun createDirIfNotExists(pathname: String){
     val folder = File(pathname)
@@ -53,6 +54,22 @@ internal fun getConfigData(): PropertiesObj {
 }
 
 internal fun testLoadNBT(){
-    val nbtCompound = NBTReader.readFile(File("level.dat"))
-    println(nbtCompound.getCompound("Data").getByte("WanderingTraderSpawnChance", 11))
+    val nbtCompound = NBTReader.readFile(File("world/level.dat"))
+    nbtCompound.run {
+        val wanderingTraderSpawnChance = getInt("WanderingTraderSpawnChance")
+        val borderCenterX = getDouble("BorderCenterX")
+        val borderCenterZ = getDouble("BorderCenterZ")
+        val difficulty = getByte("Difficulty", 2)
+        val borderSizeLerpTime = getLong("BorderSizeLerpTime")
+        val raining = getByte("raining")
+        val time = getLong("Time")
+        val gameType = getInt("GameType")
+        val borderDamagePerBlock = getDouble("BorderDamagePerBlock", 0.2)
+        val borderWarningsBlocks = getDouble("BorderWarningBlocks", 5.0)
+        val worldGenCompound = getCompound("WorldGenSettings")
+        val bonusChest = worldGenCompound.getByte("bonus_chest")
+        val seed = worldGenCompound.getLong("seed", Random().nextLong())
+        val generateFeatures = worldGenCompound.getByte("generate_features", 1)
+        val dimensionsCompound = worldGenCompound.getCompound("dimensions")
+    }
 }
