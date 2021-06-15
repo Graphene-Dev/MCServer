@@ -12,30 +12,30 @@ import de.crash.netty.packets.status.RequestHandler
 import de.crash.netty.packets.status.ResponsePacket
 import java.util.*
 
-enum class PacketType(val id: Int, val handler: PacketHandler? = null) {
+enum class PacketType(val id: Int) {
     // HANDSHAKE
 
-    HANDSHAKE(0, HandshakeHandler()),
+    HANDSHAKE(0),
 
     // STATUS
 
-    RESPONSE(0, ResponsePacket()),
-    REQUEST(0, RequestHandler()),
-    PING_STATUS(1, PingStatusHandler()),
-    PONG_STATUS(1, PongStatusPacket(System.currentTimeMillis())),
+    RESPONSE(0),
+    REQUEST(0),
+    PING_STATUS(1),
+    PONG_STATUS(1),
 
     // LOGIN
     //Clientbound
 
-    DISCONNECT_LOGIN(0, DisconnectLoginPacket()),
+    DISCONNECT_LOGIN(0),
     ENCRYPTION_REQUEST(1),
-    LOGIN_SUCCESS(2, LoginSuccessPacket("SET_A_PLAYER_NAME", UUID.randomUUID())),
+    LOGIN_SUCCESS(2),
     SET_COMPRESSION(3),
     LOGIN_PLUGIN_REQUEST(4),
 
     //Serverbound
 
-    LOGIN_START(0, LoginStartHandler()),
+    LOGIN_START(0),
     ENCRYPTION_RESPONSE(1),
     LOGIN_PLUGIN_RESPONSE(2),
 
@@ -68,7 +68,7 @@ enum class PacketType(val id: Int, val handler: PacketHandler? = null) {
     SET_COOLDOWN(23),
     PLUGIN_MESSAGE_CLIENTBOUND(24),
     NAMED_SOUND_EFFECT(25),
-    DISCONNECT_PLAY(26, DisconnectPlayPacket()),
+    DISCONNECT_PLAY(26),
     ENTITY_STATUS(27),
     EXPLOSION(28),
     UNLOAD_CHUNK(29),
@@ -80,7 +80,7 @@ enum class PacketType(val id: Int, val handler: PacketHandler? = null) {
     EFFECT(35),
     PARTICLE(36),
     UPDATE_LIGHT(37),
-    JOIN_GAME(38, JoinGamePacket()),
+    JOIN_GAME(38),
     MAP_DATA(39),
     TRADE_LIST(40),
     ENTITY_POSITION(41),

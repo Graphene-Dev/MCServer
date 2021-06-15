@@ -1,27 +1,27 @@
-package de.crash.json
+package de.crash.mojangapi.json
 
-data class ServerStatusObj (
+internal data class ServerStatusResponse (
     val version: ServerStatusVersion,
     val players: ServerStatusPlayers,
     val description: ServerStatusDescription
 )
 
-data class ServerStatusDescription (
+internal data class ServerStatusDescription (
     val text: String
 )
 
-data class ServerStatusPlayers (
+internal data class ServerStatusPlayers (
     val max: Long,
     val online: Long,
     val sample: List<ServerStatusSample>
 )
 
-data class ServerStatusSample (
+internal data class ServerStatusSample (
     val name: String,
     val id: String
 )
 
-data class ServerStatusVersion (
+internal data class ServerStatusVersion (
     val name: String,
     val protocol: Long
 )
