@@ -3,9 +3,8 @@ package de.crash
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.crash.util.getCurrentTimeStamp
+import me.nullicorn.nedit.NBTReader
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 fun createDirIfNotExists(pathname: String){
     val folder = File(pathname)
@@ -24,7 +23,7 @@ fun createFileIfNotExists(pathname: String) : File {
     return file
 }
 
-fun File.notExists() = !this.exists()
+fun File.notExists(): Boolean = !this.exists()
 
 internal fun hasEulaAccepted(): Boolean {
     val file = File("eula.txt")
@@ -51,4 +50,9 @@ internal fun getConfigData(): PropertiesObj {
         return defaultConfig
     }
     return jacksonObjectMapper().readValue(file)
+}
+
+internal fun testLoadNBT(){
+    val nbtCompound = NBTReader.readFile(File("level.dat"))
+    println(nbtCompound.getCompound("Data").getByte("WanderingTraderSpawnChance", 11))
 }

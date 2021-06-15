@@ -8,6 +8,7 @@ internal fun main(args: Array<String>) {
     initPacketHandlers()
     println("Loading Configs...")
     loadConfig()
+    testLoadNBT()
     println("Configs loaded!\nStart Server...")
     startNettyServer() ?: exitProcess(0)
 }

@@ -11,12 +11,13 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
     implementation("io.netty:netty-all:4.1.44.Final")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
-    implementation("net.benwoodworth.knbt:knbt:0.5.0")
+    implementation("com.github.TheNullicorn:Nedit:2.0.0")
     implementation(kotlin("stdlib"))
 }
 
