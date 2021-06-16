@@ -1,5 +1,6 @@
 package de.crash
 
+import de.crash.mc.nbt.testLoadNBT
 import de.crash.netty.packets.initPacketHandlers
 import de.crash.netty.startNettyServer
 import kotlin.system.exitProcess
