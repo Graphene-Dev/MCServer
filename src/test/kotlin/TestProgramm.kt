@@ -1,3 +1,3 @@
 internal fun main(){
-    de.crash.main(emptyArray())
+    de.crash.main()
 }

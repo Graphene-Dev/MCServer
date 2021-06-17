@@ -18,6 +18,7 @@ dependencies {
     implementation("io.netty:netty-all:4.1.44.Final")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
     implementation("com.github.TheNullicorn:Nedit:2.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
     implementation(kotlin("stdlib"))
 }
 
