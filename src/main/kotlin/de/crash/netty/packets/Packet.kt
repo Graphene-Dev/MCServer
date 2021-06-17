@@ -32,15 +32,15 @@ class Packet() {
     }
 
     fun write(value: Short) {
-        byteBuffer.addAll(value.getBytes().asList())
+        byteBuffer.addAll(value.toByteArray().asList())
     }
 
     fun write(value: Int) {
-        byteBuffer.addAll(value.getBytes())
+        byteBuffer.addAll(value.toByteArray())
     }
 
     fun write(value: Long) {
-        byteBuffer.addAll(value.getBytes())
+        byteBuffer.addAll(value.toByteArray())
     }
 
     fun write(value: Float) {
@@ -58,7 +58,7 @@ class Packet() {
     }
 
     fun write(value: UUID) {
-        write(value.getBytes())
+        write(value.toByteArray())
     }
     //endregion
 
@@ -156,11 +156,18 @@ class Packet() {
     //endregion
 
     fun getPacketBytes(): ByteArray {
-        val lengthBytes = byteBuffer.size.getBytes()
+        val lengthBytes = byteBuffer.size.toByteArray()
         val packetBytes = mutableListOf<Byte>()
         packetBytes.addAll(lengthBytes)
         packetBytes.addAll(byteBuffer)
         return packetBytes.toByteArray()
+    }
+
+    fun copy(): Packet{
+        val newPacket = Packet(this.bytes)
+        newPacket.readPos = this.readPos
+        newPacket.byteBuffer.addAll(this.byteBuffer)
+        return newPacket
     }
 }
 
@@ -168,9 +175,9 @@ class CouldNotReadValueOfTypeException(type: String) : Throwable() {
     override val message: String = "Could not read Value of type $type from packet!"
 }
 
-fun Short.getBytes(): ByteArray = byteArrayOf((this.toInt() ushr 8).toByte(), this.toByte())
+fun Short.toByteArray(): ByteArray = byteArrayOf((this.toInt() ushr 8).toByte(), this.toByte())
 
-fun Int.getBytes(): MutableList<Byte> {
+fun Int.toByteArray(): MutableList<Byte> {
     var bvalue = this
     val result = mutableListOf<Byte>()
     do {
@@ -184,7 +191,7 @@ fun Int.getBytes(): MutableList<Byte> {
     return result
 }
 
-fun Long.getBytes(): MutableList<Byte> {
+fun Long.toByteArray(): MutableList<Byte> {
     var bvalue = this
     val result = mutableListOf<Byte>()
     do {
@@ -198,7 +205,7 @@ fun Long.getBytes(): MutableList<Byte> {
     return result
 }
 
-fun UUID.getBytes(): ByteArray {
+fun UUID.toByteArray(): ByteArray {
     val bb: ByteBuffer = ByteBuffer.wrap(ByteArray(16))
     bb.putLong(this.mostSignificantBits)
     bb.putLong(this.leastSignificantBits)

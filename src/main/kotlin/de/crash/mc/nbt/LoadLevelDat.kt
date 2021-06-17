@@ -3,16 +3,12 @@ package de.crash.mc.nbt
 import de.crash.mc.world.dimension.DimensionBiomeSourceData
 import de.crash.mc.world.dimension.DimensionGeneratorData
 import de.crash.mc.world.dimension.DimensionLevelData
-import de.crash.util.getByte
-import de.crash.util.getDouble
-import de.crash.util.getInt
-import de.crash.util.getLong
 import me.nullicorn.nedit.NBTReader
 import java.io.File
 import java.util.*
 
 internal fun testLoadNBT(){
-    val nbtCompound = NBTReader.readFile(File("world/level.dat"))
+    val nbtCompound = NBTReader.readFile(File("world/level.dat")).getCompound("Data")
     nbtCompound.run {
         val wanderingTraderSpawnChance = getInt("WanderingTraderSpawnChance")
         val borderCenterX = getDouble("BorderCenterX")

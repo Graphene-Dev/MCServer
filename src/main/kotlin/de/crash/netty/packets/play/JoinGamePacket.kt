@@ -17,7 +17,7 @@ class JoinGamePacket : SendPacket {
         //Dimension Codec type of NBT Tag Compound
         //Dimension type of NBT Tag Compound
         packet.write(Config.defaultWorldName) //Name of world to spawn into
-        packet.write(Config.seed.getBytes().toByteArray().sha256().slice(0..7).toByteArray()) //HashedSeed type of Long -> First 8 Bytes of sha256 of seed
+        packet.write(Config.seed.toByteArray().toByteArray().sha256().slice(0..7).toByteArray()) //HashedSeed type of Long -> First 8 Bytes of sha256 of seed
         packet.write(Config.maxPlayers) //Max Players
         packet.write(Config.viewDistance) //View Distance
         packet.write(false) //reduced debug info
