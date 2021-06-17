@@ -1,0 +1,43 @@
+package de.crash.mc.world
+
+import me.nullicorn.nedit.type.NBTCompound
+
+class Gamerules internal constructor(gameruleCompound: NBTCompound){
+    var doFireTick: Boolean = gameruleCompound.getString("doFireTick", "true").toBoolean()
+    var maxCommandChainLength = gameruleCompound.getString("maxCommandChainLength", "65536").toInt()
+    var fireDamage = gameruleCompound.getString("fireDamage", "true").toBoolean()
+    var reducedDebugInfo = gameruleCompound.getString("reducedDebugInfo", "false").toBoolean()
+    var disableElytraMovementCheck = gameruleCompound.getString("disableElytraMovementCheck", "false").toBoolean()
+    var announceAdvancements = gameruleCompound.getString("announceAdvancements", "true").toBoolean()
+    var drowningDamage = gameruleCompound.getString("drowningDamage", "true").toBoolean()
+    var commandBlockOutput = gameruleCompound.getString("commandBlockOutput", "true").toBoolean()
+    var forgiveDeadPlayers = gameruleCompound.getString("forgiveDeadPlayers", "true").toBoolean()
+    var doMobSpawning = gameruleCompound.getString("doMobSpawning", "true").toBoolean()
+    var maxEntityCramming = gameruleCompound.getString("maxEntityCramming", "24").toInt()
+    var disableRaids = gameruleCompound.getString("disableRaids", "false").toBoolean()
+    var doWeatherCycle = gameruleCompound.getString("doWeatherCycle", "true").toBoolean()
+    var doDaylightCycle = gameruleCompound.getString("doDaylightCycle", "true").toBoolean()
+    var showDeathMessages = gameruleCompound.getString("showDeathMessages", "true").toBoolean()
+    var doTileDrops = gameruleCompound.getString("doTileDrops", "true").toBoolean()
+    var universalAnger = gameruleCompound.getString("universalAnger", "false").toBoolean()
+    var playersSleepingPercentage = gameruleCompound.getString("playersSleepingPercentage", "100").toInt()
+    var doInsomnia = gameruleCompound.getString("doInsomnia", "true").toBoolean()
+    var doImmediateRespawn = gameruleCompound.getString("doImmediateRespawn", "false").toBoolean()
+    var naturalRegeneration = gameruleCompound.getString("naturalRegeneration", "true").toBoolean()
+    var doMobLoot = gameruleCompound.getString("doMobLoot", "true").toBoolean()
+    var fallDamage = gameruleCompound.getString("fallDamage", "true").toBoolean()
+    var keepInventory = gameruleCompound.getString("keepInventory", "false").toBoolean()
+    var doEntityDrops = gameruleCompound.getString("doEntityDrops", "true").toBoolean()
+    var doLimitedCrafting = gameruleCompound.getString("doLimitedCrafting", "false").toBoolean()
+    var mobGriefing = gameruleCompound.getString("mobGriefing", "true").toBoolean()
+    var randomTickSpeed = gameruleCompound.getString("randomTickSpeed", "3").toInt()
+    var spawnRadius = gameruleCompound.getString("spawnRadius", "10").toInt()
+    var doTraderSpawning = gameruleCompound.getString("doTraderSpawning", "true").toBoolean()
+    var freezeDamage = gameruleCompound.getString("freezeDamage", "true").toBoolean()
+    var logAdminCommands = gameruleCompound.getString("logAdminCommands", "true").toBoolean()
+    var spectatorsGenerateChunks = gameruleCompound.getString("spectatorsGenerateChunks", "true").toBoolean()
+    var sendCommandFeedback = gameruleCompound.getString("sendCommandFeedback", "true").toBoolean()
+    var doPatrolSpawning = gameruleCompound.getString("doPatrolSpawning", "true").toBoolean()
+
+    companion object val DEFAULT = Gamerules(NBTCompound())
+}
