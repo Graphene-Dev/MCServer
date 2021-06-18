@@ -5,10 +5,9 @@ import de.crash.mc.event.MCEvent
 import de.crash.mc.event.ServerTickEvent
 import de.crash.mc.world.World
 import io.netty.channel.Channel
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.system.exitProcess
 
 object Server {
@@ -31,11 +30,16 @@ object Server {
 
     val worlds: HashMap<String, World> = hashMapOf()
 
+    @OptIn(DelicateCoroutinesApi::class)
     internal fun serverTick(){
         GlobalScope.launch {
+            var lastTick = System.currentTimeMillis()
+            var lastTickJob = GlobalScope.launch { println("Server Tick started!") }
             while (true){
-                fireEvent(ServerTickEvent())
-                delay(50)
+                if(System.currentTimeMillis() >= lastTick && lastTickJob.isCompleted){
+                    lastTick = System.currentTimeMillis() + 50
+                    lastTickJob = GlobalScope.launch { fireEvent(ServerTickEvent()) }
+                }
             }
         }.invokeOnCompletion {
             println("SERVER TICK STOPPED, SERVER SHUT DOWN.")
@@ -43,7 +47,5 @@ object Server {
         }
     }
 
-    internal fun fireEvent(mcEvent: MCEvent) {
-        GlobalScope.launch { mcEvent.fire() }
-    }
+    fun fireEvent(mcEvent: MCEvent) = mcEvent.fire()
 }

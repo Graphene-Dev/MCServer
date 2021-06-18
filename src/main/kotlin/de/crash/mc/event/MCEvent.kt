@@ -1,17 +1,24 @@
 package de.crash.mc.event
 
+import kotlin.reflect.KClass
+
 @Suppress("UNCHECKED_CAST")
 abstract class MCEvent {
-    open fun fire() {
-        actions.forEach {
-            it.value.invoke(this)
+    var isCancelled: Boolean = false
+
+    internal open fun fire() {
+        eventListener[this::class]?.forEach {
+            it.invoke(this)
+            if(this is Cancelable && isCancelled) return
         }
     }
 
     companion object {
-        internal val actions: HashMap<MCEvent,(event: MCEvent) -> Unit> = hashMapOf()
-        fun on(event: MCEvent, function: (event: MCEvent) -> Unit){
-            actions[event] = function
+        val eventListener: HashMap<KClass<*>, MutableList<(event: MCEvent) -> Unit>> = hashMapOf()
+        inline fun <reified T: MCEvent> on(noinline function: (event: T) -> Unit){
+            val tClass = T::class
+            eventListener[tClass] ?: eventListener.put(tClass, mutableListOf())
+            eventListener[tClass]!!.add(function as (MCEvent) -> Unit)
         }
     }
 }
