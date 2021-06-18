@@ -24,9 +24,9 @@ const val protocolId: Long = 755
 const val version = "1.17"
 
 internal fun loadConfig(){
+    Config = getConfigData()
     if(!hasEulaAccepted()) {
         println("YOU MUST ACCEPT THE EULA!")
         exitProcess(-1)
     }
-    Config = getConfigData()
 }
