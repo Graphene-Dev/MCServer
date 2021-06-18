@@ -1,7 +1,7 @@
 package de.crash.netty.packets.login
 
 import de.crash.mc.Server
-import de.crash.mc.entities.entity.Player
+import de.crash.mc.player.Player
 import de.crash.netty.ClientStatus
 import de.crash.netty.packets.Packet
 import de.crash.netty.packets.SendPacket

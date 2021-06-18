@@ -1,12 +1,11 @@
 package de.crash.mc
 
-import de.crash.mc.entities.entity.Player
+import de.crash.mc.player.Player
 import de.crash.mc.event.MCEvent
 import de.crash.mc.event.ServerTickEvent
 import de.crash.mc.world.World
 import io.netty.channel.Channel
 import kotlinx.coroutines.*
-import java.util.*
 import kotlin.collections.HashMap
 import kotlin.system.exitProcess
 
