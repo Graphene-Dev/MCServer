@@ -30,15 +30,17 @@ object Server {
 
     val worlds: HashMap<String, World> = hashMapOf()
 
+    internal var lastTickFinished = true
+
     @OptIn(DelicateCoroutinesApi::class)
     internal fun serverTick(){
         GlobalScope.launch {
             var lastTick = System.currentTimeMillis()
-            var lastTickJob = GlobalScope.launch { println("Server Tick started!") }
             while (true){
-                if(System.currentTimeMillis() >= lastTick && lastTickJob.isCompleted){
+                if(System.currentTimeMillis() >= lastTick && lastTickFinished){
                     lastTick = System.currentTimeMillis() + 50
-                    lastTickJob = GlobalScope.launch { fireEvent(ServerTickEvent()) }
+                    lastTickFinished = false
+                    fireEvent(ServerTickEvent())
                 }
             }
         }.invokeOnCompletion {
@@ -47,5 +49,7 @@ object Server {
         }
     }
 
-    fun fireEvent(mcEvent: MCEvent) = mcEvent.fire()
+    fun fireEvent(mcEvent: MCEvent) {
+        mcEvent.fire()
+    }
 }
