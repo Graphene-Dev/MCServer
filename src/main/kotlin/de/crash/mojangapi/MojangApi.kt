@@ -6,11 +6,26 @@ import de.crash.mojangapi.json.*
 import de.crash.mojangapi.json.NameHistoryResponse
 import de.crash.mojangapi.json.ProfileResponse
 import de.crash.util.post
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.first
 import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
 
 object MojangApi {
+    suspend fun getStatus(): Boolean {
+        val response = URL("https://status.mojang.com/check").readText()
+        val obj = jacksonObjectMapper().readTree(response)
+        var result = true
+        obj.elements().forEach {
+            val node = it.fields().asFlow().first()
+            if(node.key != "sessionserver.mojang.com" && node.value.asText() != "green"){
+                result = false
+            }
+        }
+        return result
+    }
+
     fun getUUIDofUsername(value: String): UUID{
         val response = URL("https://api.mojang.com/users/profiles/minecraft/$value").readText()
         val rawUUID = jacksonObjectMapper().readValue<UsernameToUUIDResponse>(response).id

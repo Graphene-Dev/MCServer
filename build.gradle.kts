@@ -31,5 +31,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("de.crash.ServerKt")
+    mainClass.set("de.crash.StartServerKt")
 }
