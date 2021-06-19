@@ -22,6 +22,15 @@ internal constructor(nbtCompound: NBTCompound) {
     val bonusChest: Boolean
     val hardcore: Boolean
     val difficultyLocked: Boolean
+    val worldBorder: Worldborder
+    var time: Long
+    var dayTime: Long
+    var wanderingTraderSpawnChance: Int
+    var wanderingTraderSpawnDelay: Int
+    var allowCommands: Boolean
+    val weather: Weather
+    var spawnLoc: Location
+
     init {
         nbtCompound.run {
             baseName = getString("LevelName", "world")
@@ -50,44 +59,33 @@ internal constructor(nbtCompound: NBTCompound) {
             dimensionsCompound.forEach {
                 levels.add(Level(dimensionsCompound.getCompound(it.key)))
             }
-            val wanderingTraderSpawnChance = getInt("WanderingTraderSpawnChance")
-            val wanderingTraderSpawnDelay = getInt("WanderingTraderSpawnDelay", 24000)
-            val borderCenterX = getDouble("BorderCenterX")
-            val borderCenterZ = getDouble("BorderCenterZ")
-            val borderSizeLerpTime = getLong("BorderSizeLerpTime")
-            val borderDamagePerBlock = getDouble("BorderDamagePerBlock", 0.2)
-            val borderWarningsBlocks = getDouble("BorderWarningBlocks", 5.0)
-            val borderSizeLerpTarget = getDouble("BorderSizeLerpTarget", 5.9999968E7)
-            val borderSafeZone = getDouble("BorderSafeZone", 5.0)
-            val borderWarningTime = getDouble("BorderWarningTime", 15.0)
-            val borderSize = getDouble("BorderSize", 5.9999968E7)
-            val raining = getByte("raining").asBoolean()
-            val time = getLong("Time")
-            val dragonFightCompound = getCompound("DragonFight")
-            val dragonFightGateways = mutableListOf<Int>()
-            dragonFightCompound.getList("Gateways").forEachInt { dragonFightGateways.add(it) }
-            val dragonFightNeedsStateScanning = dragonFightCompound.getByte("NeedsStateScanning", 1)
-            val dragonKilled = dragonFightCompound.getByte("DragonKilled", 1)
-            val dragonPreviouslyKilled = dragonFightCompound.getByte("PreviouslyKilled", 1)
-            val versionCompound = getCompound("Version")
-            val versionSnapshot = versionCompound.getByte("Snapshot").asBoolean()
-            val versionId = versionCompound.getInt("Id", 2724)
-            val versionName = versionCompound.getString("Name", "1.17")
-            val dayTime = getLong("DayTime")
-            val initialized = getByte("initialized", 1).asBoolean()
-            val wasModded = getByte("WasModded").asBoolean()
-            val allowCommands = getByte("allowCommands").asBoolean()
+            worldBorder = Worldborder(this)
+            time = getLong("Time")
+            wanderingTraderSpawnChance = getInt("WanderingTraderSpawnChance")
+            wanderingTraderSpawnDelay = getInt("WanderingTraderSpawnDelay", 24000)
+            allowCommands = getByte("allowCommands").asBoolean()
+            dayTime = getLong("DayTime")
+            weather = Weather(this)
+            //val dragonFightCompound = getCompound("DragonFight")
+            //val dragonFightGateways = mutableListOf<Int>()
+            //dragonFightCompound.getList("Gateways").forEachInt { dragonFightGateways.add(it) }
+            //val dragonFightNeedsStateScanning = dragonFightCompound.getByte("NeedsStateScanning", 1)
+            //val dragonKilled = dragonFightCompound.getByte("DragonKilled", 1)
+            //val dragonPreviouslyKilled = dragonFightCompound.getByte("PreviouslyKilled", 1)
+            //val versionCompound = getCompound("Version")
+            //val versionSnapshot = versionCompound.getByte("Snapshot").asBoolean()
+            //val versionId = versionCompound.getInt("Id", 2724)
+            //val versionName = versionCompound.getString("Name", "1.17")
+            //val initialized = getByte("initialized").asBoolean()
+            //val wasModded = getByte("WasModded").asBoolean()
             val spawnX = getInt("SpawnX")
             val spawnY = getInt("SpawnY", 70)
             val spawnZ = getInt("SpawnZ")
-            val rainTime = getInt("rainTime")
-            val thunderTime = getInt("thunderTime")
-            val clearWeatherTime = getInt("clearWeatherTime")
-            val thundering = getByte("thundering").asBoolean()
             val spawnAngle = getFloat("SpawnAngle", 0.0F)
-            val version = getInt("version", 19133)
-            val lastPlayed = getLong("LastPlayed", System.currentTimeMillis())
-            val dataVersion = getInt("DataVersion", 2724)
+            spawnLoc = Location(this@World, spawnX.toDouble(), spawnY.toDouble(), spawnZ.toDouble(), spawnAngle, 0F)
+            //val version = getInt("version", 19133)
+            //val lastPlayed = getLong("LastPlayed", System.currentTimeMillis())
+            //val dataVersion = getInt("DataVersion", 2724)
         }
         Server.worlds[baseName] = this
     }
