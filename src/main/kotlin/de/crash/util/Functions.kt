@@ -42,3 +42,5 @@ fun getCurrentTimeStamp(): String {
     val dateformat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
     return dateformat.format(date).toString()
 }
+
+fun String.toMCEnumString(): String = this.replace("minecraft:", "").uppercase()

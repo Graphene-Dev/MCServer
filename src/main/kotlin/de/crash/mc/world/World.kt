@@ -6,6 +6,7 @@ import de.crash.mc.player.Gamemode
 import de.crash.mc.world.dimension.DimensionBiomeSourceData
 import de.crash.mc.world.dimension.DimensionGeneratorData
 import de.crash.mc.world.dimension.DimensionLevelData
+import de.crash.mc.world.dimension.Level
 import me.nullicorn.nedit.type.NBTCompound
 import java.util.*
 
@@ -15,6 +16,12 @@ internal constructor(nbtCompound: NBTCompound) {
     val difficulty: Difficulty
     val gameType: Gamemode
     val gamerules: Gamerules
+    val levels = mutableListOf<Level>()
+    val seed: Long
+    val generateStructures: Boolean
+    val bonusChest: Boolean
+    val hardcore: Boolean
+    val difficultyLocked: Boolean
     init {
         nbtCompound.run {
             baseName = getString("LevelName", "world")
@@ -33,6 +40,16 @@ internal constructor(nbtCompound: NBTCompound) {
                 else -> Gamemode.SURVIVAL
             }
             gamerules = Gamerules(getCompound("GameRules"))
+            val worldGenCompound = getCompound("WorldGenSettings")
+            bonusChest = worldGenCompound.getByte("bonus_chest").asBoolean()
+            seed = worldGenCompound.getLong("seed", Random().nextLong())
+            generateStructures = worldGenCompound.getByte("generate_features", 1).asBoolean()
+            hardcore = getByte("hardcore").asBoolean()
+            difficultyLocked = getByte("DifficultyLocked").asBoolean()
+            val dimensionsCompound = worldGenCompound.getCompound("dimensions")
+            dimensionsCompound.forEach {
+                levels.add(Level(dimensionsCompound.getCompound(it.key)))
+            }
             val wanderingTraderSpawnChance = getInt("WanderingTraderSpawnChance")
             val wanderingTraderSpawnDelay = getInt("WanderingTraderSpawnDelay", 24000)
             val borderCenterX = getDouble("BorderCenterX")
@@ -46,27 +63,6 @@ internal constructor(nbtCompound: NBTCompound) {
             val borderSize = getDouble("BorderSize", 5.9999968E7)
             val raining = getByte("raining").asBoolean()
             val time = getLong("Time")
-            val worldGenCompound = getCompound("WorldGenSettings")
-            val bonusChest = worldGenCompound.getByte("bonus_chest").asBoolean()
-            val seed = worldGenCompound.getLong("seed", Random().nextLong())
-            val generateFeatures = worldGenCompound.getByte("generate_features", 1).asBoolean()
-            val dimensionsCompound = worldGenCompound.getCompound("dimensions")
-            val dimensions = mutableListOf<DimensionLevelData>()
-            dimensionsCompound.forEach {
-                val dimensionCompound = dimensionsCompound.getCompound(it.key)
-                val dimensionType = dimensionCompound.getString("type", "minecraft:overworld")
-                val dimensionGeneratorCompound = dimensionCompound.getCompound("generator")
-                val dimensionGeneratorSettings = dimensionGeneratorCompound.getString("settings", "minecraft:overworld")
-                val dimensionGeneratorSeed = dimensionGeneratorCompound.getLong("seed", Random().nextLong())
-                val dimensionGeneratorType = dimensionGeneratorCompound.getString("type", "minecraft:noise")
-                val dimensionBiomeCompound = dimensionGeneratorCompound.getCompound("biome_source")
-                val dimensionBiomeType = dimensionBiomeCompound.getString("type", "minecraft:vanilla_layered")
-                val generatorBiomeLargeBiomes = dimensionBiomeCompound.getByte("large_biomes").asBoolean()
-                dimensions.add(
-                    DimensionLevelData(it.key, dimensionType, DimensionGeneratorData(dimensionGeneratorSettings, dimensionGeneratorSeed, dimensionGeneratorType,
-                    DimensionBiomeSourceData(dimensionGeneratorSeed, dimensionBiomeType, generatorBiomeLargeBiomes)))
-                )
-            }
             val dragonFightCompound = getCompound("DragonFight")
             val dragonFightGateways = mutableListOf<Int>()
             dragonFightCompound.getList("Gateways").forEachInt { dragonFightGateways.add(it) }
@@ -86,8 +82,6 @@ internal constructor(nbtCompound: NBTCompound) {
             val spawnZ = getInt("SpawnZ")
             val rainTime = getInt("rainTime")
             val thunderTime = getInt("thunderTime")
-            val hardcore = getByte("hardcore").asBoolean()
-            val difficultyLocked = getByte("DifficultyLocked").asBoolean()
             val clearWeatherTime = getInt("clearWeatherTime")
             val thundering = getByte("thundering").asBoolean()
             val spawnAngle = getFloat("SpawnAngle", 0.0F)

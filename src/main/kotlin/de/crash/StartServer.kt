@@ -1,6 +1,5 @@
 package de.crash
 
-import de.crash.mc.Server
 import de.crash.mojangapi.MojangApi
 import de.crash.netty.packets.initPacketHandlers
 import de.crash.netty.startNettyServer
@@ -14,6 +13,5 @@ internal suspend fun main() {
     println("Loading Configs...")
     loadConfig()
     println("Configs loaded!\nStart Server...")
-    Server.serverTick()
     startNettyServer() ?: exitProcess(0)
 }
