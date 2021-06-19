@@ -2,7 +2,7 @@ package de.crash.mc.world.dimension
 
 enum class DimensionType {
     OVERWORLD,
-    NETHER,
-    END,
+    THE_NETHER,
+    THE_END,
     FLAT
 }

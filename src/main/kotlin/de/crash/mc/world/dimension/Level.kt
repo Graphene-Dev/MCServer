@@ -2,12 +2,13 @@ package de.crash.mc.world.dimension
 
 import de.crash.mc.nbt.asBoolean
 import de.crash.mc.nbt.getByte
+import de.crash.mc.world.World
 import de.crash.mc.world.generator.GeneratorType
 import de.crash.util.toMCEnumString
 import me.nullicorn.nedit.type.NBTCompound
 import java.util.*
 
-class Level internal constructor(nbtCompound: NBTCompound){
+class Level internal constructor(nbtCompound: NBTCompound, val world: World){
     val dimensionType: DimensionType
     val generatorSettings: String
     val seed: Long

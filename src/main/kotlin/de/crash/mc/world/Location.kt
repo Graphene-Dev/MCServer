@@ -1,9 +1,10 @@
 package de.crash.mc.world
 
+import de.crash.mc.world.dimension.Level
 import kotlin.math.ceil
 
 class Location {
-    var world: World
+    var level: Level
     var x: Double
     var y: Double
     var z: Double
@@ -13,9 +14,9 @@ class Location {
     var blockY: Int
     var blockZ: Int
 
-    constructor(world: World, x: Double, y: Double, z: Double) : this(world, x, y, z, 0F, 0F)
-    constructor(world: World, x: Double, y: Double, z: Double, yaw: Float, pitch: Float){
-        this.world = world
+    constructor(level: Level, x: Double, y: Double, z: Double) : this(level, x, y, z, 0F, 0F)
+    constructor(level: Level, x: Double, y: Double, z: Double, yaw: Float, pitch: Float){
+        this.level = level
         this.x = x
         this.y = y
         this.z = z

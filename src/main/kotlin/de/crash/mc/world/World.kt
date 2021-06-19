@@ -1,14 +1,14 @@
 package de.crash.mc.world
 
-import de.crash.mc.Server
 import de.crash.mc.nbt.*
 import de.crash.mc.player.Gamemode
 import de.crash.mc.world.dimension.Level
 import me.nullicorn.nedit.type.NBTCompound
+import java.io.File
 import java.util.*
 
 class World
-internal constructor(nbtCompound: NBTCompound) {
+internal constructor(nbtCompound: NBTCompound, worldFolder: File) {
     val baseName: String
     val difficulty: Difficulty
     val gameType: Gamemode
@@ -54,7 +54,7 @@ internal constructor(nbtCompound: NBTCompound) {
             difficultyLocked = getByte("DifficultyLocked").asBoolean()
             val dimensionsCompound = worldGenCompound.getCompound("dimensions")
             dimensionsCompound.forEach {
-                levels.add(Level(dimensionsCompound.getCompound(it.key)))
+                levels.add(Level(dimensionsCompound.getCompound(it.key), this@World))
             }
             worldBorder = Worldborder(this)
             time = getLong("Time")
@@ -63,6 +63,11 @@ internal constructor(nbtCompound: NBTCompound) {
             allowCommands = getByte("allowCommands").asBoolean()
             dayTime = getLong("DayTime")
             weather = Weather(this)
+            val spawnX = getInt("SpawnX")
+            val spawnY = getInt("SpawnY", 70)
+            val spawnZ = getInt("SpawnZ")
+            val spawnAngle = getFloat("SpawnAngle", 0.0F)
+            spawnLoc = Location(this@World.levels[0]!!, spawnX.toDouble(), spawnY.toDouble(), spawnZ.toDouble(), spawnAngle, 0F)
             //val dragonFightCompound = getCompound("DragonFight")
             //val dragonFightGateways = mutableListOf<Int>()
             //dragonFightCompound.getList("Gateways").forEachInt { dragonFightGateways.add(it) }
@@ -75,20 +80,13 @@ internal constructor(nbtCompound: NBTCompound) {
             //val versionName = versionCompound.getString("Name", "1.17")
             //val initialized = getByte("initialized").asBoolean()
             //val wasModded = getByte("WasModded").asBoolean()
-            val spawnX = getInt("SpawnX")
-            val spawnY = getInt("SpawnY", 70)
-            val spawnZ = getInt("SpawnZ")
-            val spawnAngle = getFloat("SpawnAngle", 0.0F)
-            spawnLoc = Location(this@World, spawnX.toDouble(), spawnY.toDouble(), spawnZ.toDouble(), spawnAngle, 0F)
             //val version = getInt("version", 19133)
             //val lastPlayed = getLong("LastPlayed", System.currentTimeMillis())
             //val dataVersion = getInt("DataVersion", 2724)
         }
-        Server.worlds[baseName] = this
     }
     
     companion object {
         const val MAX_WORLD_HEIGHT = 256
-        internal val DEFAULT = World(NBTCompound())
     }
 }

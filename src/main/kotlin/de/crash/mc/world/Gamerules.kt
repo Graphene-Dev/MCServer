@@ -38,6 +38,4 @@ class Gamerules internal constructor(gameruleCompound: NBTCompound){
     var spectatorsGenerateChunks = gameruleCompound.getString("spectatorsGenerateChunks", "true").toBoolean()
     var sendCommandFeedback = gameruleCompound.getString("sendCommandFeedback", "true").toBoolean()
     var doPatrolSpawning = gameruleCompound.getString("doPatrolSpawning", "true").toBoolean()
-
-    companion object val DEFAULT = Gamerules(NBTCompound())
 }
