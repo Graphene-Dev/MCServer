@@ -3,9 +3,6 @@ package de.crash.mc.world
 import de.crash.mc.Server
 import de.crash.mc.nbt.*
 import de.crash.mc.player.Gamemode
-import de.crash.mc.world.dimension.DimensionBiomeSourceData
-import de.crash.mc.world.dimension.DimensionGeneratorData
-import de.crash.mc.world.dimension.DimensionLevelData
 import de.crash.mc.world.dimension.Level
 import me.nullicorn.nedit.type.NBTCompound
 import java.util.*
