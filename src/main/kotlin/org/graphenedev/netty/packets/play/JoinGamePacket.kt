@@ -10,8 +10,8 @@ class JoinGamePacket : SendPacket {
     override fun sendPacket(channel: Channel) {
         val packet = Packet(PacketType.JOIN_GAME)
         packet.writeAsVarInt(63) //Entity ID (EID)
-        packet.write(false) //isHardcore
-        packet.write(1.toByte()) //Gamemode: 1 for Creative
+        packet.write(Config.isHardcore) //isHardcore
+        packet.write(Config.defaultGamemode) //Gamemode: 1 for Creative
         packet.write((-1).toByte()) //Previous Gamemode,-1 for none
         packet.writeAsVarInt(1) //Amount of worlds
         packet.write(Config.defaultWorldName) //Array of world names

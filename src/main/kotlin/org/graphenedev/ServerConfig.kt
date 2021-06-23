@@ -4,7 +4,7 @@ import kotlin.system.exitProcess
 
 data class PropertiesObj(val port: Int, val server_ip: String, val online_mode: Boolean, val pvp: Boolean, val maxPlayers: Int, val whitelist: Boolean,
     val motd: String, val viewDistance: Int, val defaultWorldName: String, val defaultGamemode: Byte, val seed: Long, val allowCommands: Boolean,
-    val genStructures: Boolean)
+    val genStructures: Boolean, val isHardcore: Boolean)
 
 internal val defaultConfig = PropertiesObj(
     port = 25565,
@@ -19,7 +19,8 @@ internal val defaultConfig = PropertiesObj(
     defaultGamemode = 1,
     seed = 5859195333423694798,
     allowCommands = true,
-    genStructures = true
+    genStructures = true,
+    isHardcore = false
 )
 
 var Config: PropertiesObj = defaultConfig

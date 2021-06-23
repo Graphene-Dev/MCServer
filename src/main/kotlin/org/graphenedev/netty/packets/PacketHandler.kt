@@ -11,11 +11,10 @@ import org.graphenedev.netty.packets.login.LoginStartHandler
 import org.graphenedev.netty.packets.status.PingStatusHandler
 import org.graphenedev.netty.packets.status.RequestHandler
 
-internal interface PacketHandler
-internal interface HandlePacket: PacketHandler {
+internal interface HandlePacket {
     fun handle(channel: Channel, packet: Packet)
 }
-internal interface SendPacket: PacketHandler {
+internal interface SendPacket {
     fun sendPacket(channel: Channel)
 }
 
