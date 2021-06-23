@@ -1,4 +1,5 @@
 # Minecraft Server on Kotlin
+[![CodeFactor](https://www.codefactor.io/repository/github/graphene-dev/mcserver/badge)](https://www.codefactor.io/repository/github/graphene-dev/mcserver)
 
 ![](https://upload.wikimedia.org/wikipedia/de/thumb/5/57/Minecraft_logo-SVG.svg/2000px-Minecraft_logo-SVG.svg.png)
 
