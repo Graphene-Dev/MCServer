@@ -5,7 +5,7 @@ import org.graphenedev.mc.Server
 import org.graphenedev.netty.packets.PacketHandler
 import org.graphenedev.netty.packets.Packet
 
-class ChatMessageServerboundHandler() : PacketHandler {
+class ChatMessageHandler() : PacketHandler {
     override fun handle(channel: Channel, packet: Packet) {
         val message = packet.readString()
         if(message.startsWith("/")){
