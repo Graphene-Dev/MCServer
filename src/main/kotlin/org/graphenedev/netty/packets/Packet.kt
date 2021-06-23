@@ -164,8 +164,8 @@ class Packet() {
 
     fun readInt(): Int {
         if(bytes.size > readPos) {
-            val result: Int = (0xff and bytes[readPos].toInt()) shl 56 or ((0xff and bytes[readPos + 1].toInt()) shl 48
-                    ) or ((0xff and bytes[readPos + 2].toInt()) shl 40) or ((0xff and bytes[readPos + 3].toInt()) shl 32)
+            val result: Int = 0xff and bytes[readPos].toInt() shl 56 or (0xff and bytes[readPos + 1].toInt() shl 48
+                    ) or (0xff and bytes[readPos + 2].toInt() shl 40) or (0xff and bytes[readPos + 3].toInt() shl 32)
             readPos += 4
             return result
         }else {
