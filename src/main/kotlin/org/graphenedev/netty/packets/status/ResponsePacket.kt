@@ -9,12 +9,12 @@ import org.graphenedev.mojangapi.json.ServerStatusResponse
 import org.graphenedev.mojangapi.json.ServerStatusVersion
 import org.graphenedev.netty.packets.Packet
 import org.graphenedev.netty.packets.PacketType
-import org.graphenedev.netty.packets.SendPacket
+import org.graphenedev.netty.packets.PacketSender
 import org.graphenedev.netty.packets.sendPacket
 import org.graphenedev.protocolId
 import org.graphenedev.version
 
-class ResponsePacket : SendPacket {
+class ResponsePacket : PacketSender {
     override fun sendPacket(channel: Channel){
         val packet = Packet(PacketType.RESPONSE)
         val serverStatusObj = ServerStatusResponse(

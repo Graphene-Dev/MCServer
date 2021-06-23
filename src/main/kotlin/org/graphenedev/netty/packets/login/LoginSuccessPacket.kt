@@ -5,13 +5,13 @@ import org.graphenedev.mc.Server
 import org.graphenedev.mc.player.Player
 import org.graphenedev.netty.ClientStatus
 import org.graphenedev.netty.packets.Packet
-import org.graphenedev.netty.packets.SendPacket
+import org.graphenedev.netty.packets.PacketSender
 import org.graphenedev.netty.packets.nettyClients
 import org.graphenedev.netty.packets.play.JoinGamePacket
 import org.graphenedev.netty.packets.sendPacket
 import java.util.*
 
-class LoginSuccessPacket(private val username: String, private val uuid: UUID): SendPacket {
+class LoginSuccessPacket(private val username: String, private val uuid: UUID): PacketSender {
     override fun sendPacket(channel: Channel) {
         val packet = Packet(2)
         packet.write(uuid)

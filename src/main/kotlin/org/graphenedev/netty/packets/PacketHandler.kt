@@ -11,25 +11,25 @@ import org.graphenedev.netty.packets.login.LoginStartHandler
 import org.graphenedev.netty.packets.status.PingStatusHandler
 import org.graphenedev.netty.packets.status.RequestHandler
 
-internal interface HandlePacket {
+internal interface PacketHandler {
     fun handle(channel: Channel, packet: Packet)
 }
-internal interface SendPacket {
+internal interface PacketSender {
     fun sendPacket(channel: Channel)
 }
 
-internal val packetHandlers = hashMapOf<ClientStatus, HashMap<Int, HandlePacket>>()
+internal val packetHandlers = hashMapOf<ClientStatus, HashMap<Int, PacketHandler>>()
 internal val nettyClients = hashMapOf<Channel, NettyClient>()
 
 internal fun initPacketHandlers(){
-    val handShakePacketMap = HashMap<Int, HandlePacket>()
+    val handShakePacketMap = HashMap<Int, PacketHandler>()
     handShakePacketMap[PacketType.HANDSHAKE.id] = HandshakeHandler()
     packetHandlers[ClientStatus.HANDSHAKE] = handShakePacketMap
-    val statusPacketMap = HashMap<Int, HandlePacket>()
+    val statusPacketMap = HashMap<Int, PacketHandler>()
     statusPacketMap[PacketType.REQUEST.id] = RequestHandler()
     statusPacketMap[PacketType.PING_STATUS.id] = PingStatusHandler()
     packetHandlers[ClientStatus.STATUS] = statusPacketMap
-    val loginPacketMap = HashMap<Int, HandlePacket>()
+    val loginPacketMap = HashMap<Int, PacketHandler>()
     loginPacketMap[PacketType.LOGIN_START.id] = LoginStartHandler()
     packetHandlers[ClientStatus.LOGIN] = loginPacketMap
 }

@@ -2,19 +2,22 @@ package org.graphenedev.netty.packets.play
 
 import io.netty.channel.Channel
 import org.graphenedev.Config
+import org.graphenedev.mc.Server
 import org.graphenedev.netty.packets.*
-import org.graphenedev.netty.packets.SendPacket
+import org.graphenedev.netty.packets.PacketSender
 import org.graphenedev.util.sha256
 
-class JoinGamePacket : SendPacket {
+class JoinGamePacket(private val previousGamemode: Byte = -1, private val entityId: Int = 63) : PacketSender {
     override fun sendPacket(channel: Channel) {
         val packet = Packet(PacketType.JOIN_GAME)
-        packet.writeAsVarInt(63) //Entity ID (EID)
+        packet.writeAsVarInt(entityId) //Entity ID (EID)
         packet.write(Config.isHardcore) //isHardcore
         packet.write(Config.defaultGamemode) //Gamemode: 1 for Creative
-        packet.write((-1).toByte()) //Previous Gamemode,-1 for none
-        packet.writeAsVarInt(1) //Amount of worlds
-        packet.write(Config.defaultWorldName) //Array of world names
+        packet.write(previousGamemode) //Previous Gamemode,-1 for none
+        packet.writeAsVarInt(Server.worlds.size) //Amount of worlds
+        Server.worlds.forEach {
+            packet.write(it.key) //Array of world names
+        }
         //Dimension Codec type of NBT Tag Compound
         //Dimension type of NBT Tag Compound
         packet.write(Config.defaultWorldName) //Name of world to spawn into
