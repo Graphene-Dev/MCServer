@@ -65,7 +65,7 @@ internal constructor(nbtCompound: NBTCompound, worldFolder: File, val name: Stri
             //val dataVersion = getInt("DataVersion", 2724)
         }
     }
-    
+
     companion object {
         const val MAX_WORLD_HEIGHT = 256
     }
