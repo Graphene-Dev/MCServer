@@ -3,6 +3,7 @@ package de.crash.mc
 import de.crash.mc.player.Player
 import de.crash.mc.event.MCEvent
 import de.crash.mc.event.ServerTickEvent
+import de.crash.mc.world.Gamerules
 import de.crash.mc.world.World
 import io.netty.channel.Channel
 import kotlinx.coroutines.*
@@ -57,23 +58,12 @@ object Server {
         }
     }
 
+    internal lateinit var gamerules: Gamerules
+
+    fun getGamerules(): Gamerules = gamerules
+
     private fun loadWorlds(){
-        File(".").listFiles()?.forEach { file ->
-            if(file.isDirectory){
-                if(!file.listFiles()?.filter { it.isFile && it.name == "level.dat" }.isNullOrEmpty()){
-                    println("Loading world \"${file.name}\"...")
-                    try {
-                        val levelDat = File(file.path + "/level.dat")
-                        val compound = NBTReader.readFile(levelDat).getCompound("Data")
-                        worlds[compound.getString("LevelName", "world")] = World(compound, file)
-                        println("\"${file.name}\" loaded!")
-                    }catch (ex: Exception) {
-                        println("ERROR WHILE LOADING WORLD, REPORT IT TO THE DEVS WITH FOLLOWING STACKTRACE:\n")
-                        ex.printStackTrace()
-                    }
-                }
-            }
-        }
+        WorldLoader.load()
     }
 
     fun fireEvent(mcEvent: MCEvent) {

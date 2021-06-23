@@ -9,7 +9,7 @@ import io.netty.channel.Channel
 class PongStatusPacket(private val payload: Long) : SendPacket {
     override fun sendPacket(channel: Channel) {
         val packet = Packet(PacketType.PONG_STATUS)
-        packet.write(payload)
+        packet.writeAsVarLong(payload)
         channel.sendPacket(packet)
     }
 }

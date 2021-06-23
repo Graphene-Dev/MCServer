@@ -9,7 +9,7 @@ import kotlin.experimental.or
 
 class Packet() {
     constructor(id: Int): this(){
-        write(id)
+        writeAsVarInt(id)
     }
 
     constructor(type: PacketType): this(type.id)
@@ -35,6 +35,14 @@ class Packet() {
         byteBuffer.addAll(value.toByteArray().asList())
     }
 
+    fun writeAsVarInt(value: Int) {
+        byteBuffer.addAll(value.toByteArrayAsVarInt())
+    }
+
+    fun writeAsVarLong(value: Long) {
+        byteBuffer.addAll(value.toByteArrayAsVarLong())
+    }
+
     fun write(value: Int) {
         byteBuffer.addAll(value.toByteArray())
     }
@@ -44,7 +52,7 @@ class Packet() {
     }
 
     fun write(value: Float) {
-        write(value.toBits())
+        writeAsVarInt(value.toBits())
     }
 
     fun write(value: Boolean) {
@@ -53,7 +61,7 @@ class Packet() {
 
     fun write(value: String) {
         val bytes = value.toByteArray().asList()
-        write(bytes.size)
+        writeAsVarInt(bytes.size)
         byteBuffer.addAll(bytes)
     }
 
@@ -153,10 +161,36 @@ class Packet() {
             throw CouldNotReadValueOfTypeException("String")
         }
     }
+
+    fun readInt(): Int {
+        if(bytes.size > readPos) {
+            val result: Int = ((0xff and bytes[readPos].toInt()) shl 56 or ((0xff and bytes[readPos + 1].toInt()) shl 48
+                    ) or ((0xff and bytes[readPos + 2].toInt()) shl 40) or ((0xff and bytes[readPos + 3].toInt()) shl 32))
+            readPos += 4
+            return result
+        }else {
+            throw CouldNotReadValueOfTypeException("3ByteInt")
+        }
+    }
+
+    fun readLong(): Long {
+        if(bytes.size > readPos) {
+            val result : Long = ((0xff and bytes[readPos].toInt()).toLong() shl 56 or ((0xff and bytes[readPos + 1].toInt()).toLong() shl 48
+                    ) or ((0xff and bytes[readPos + 2].toInt()).toLong() shl 40
+                    ) or ((0xff and bytes[readPos + 3].toInt()).toLong() shl 32
+                    ) or ((0xff and bytes[readPos + 4].toInt()).toLong() shl 24
+                    ) or ((0xff and bytes[readPos + 5].toInt()).toLong() shl 16
+                    ) or ((0xff and bytes[readPos + 6].toInt()).toLong() shl 8) or ((0xff and bytes[readPos + 7].toInt()).toLong() shl 0))
+            readPos += 8
+            return result
+        }else {
+            throw CouldNotReadValueOfTypeException("3ByteInt")
+        }
+    }
     //endregion
 
     fun getPacketBytes(): ByteArray {
-        val lengthBytes = byteBuffer.size.toByteArray()
+        val lengthBytes = byteBuffer.size.toByteArrayAsVarInt()
         val packetBytes = mutableListOf<Byte>()
         packetBytes.addAll(lengthBytes)
         packetBytes.addAll(byteBuffer)
@@ -177,7 +211,7 @@ class CouldNotReadValueOfTypeException(type: String) : Throwable() {
 
 fun Short.toByteArray(): ByteArray = byteArrayOf((this.toInt() ushr 8).toByte(), this.toByte())
 
-fun Int.toByteArray(): MutableList<Byte> {
+fun Int.toByteArrayAsVarInt(): MutableList<Byte> {
     var bvalue = this
     val result = mutableListOf<Byte>()
     do {
@@ -191,7 +225,12 @@ fun Int.toByteArray(): MutableList<Byte> {
     return result
 }
 
-fun Long.toByteArray(): MutableList<Byte> {
+fun Int.toByteArray():  MutableList<Byte> = byteArrayOf(
+        (this ushr 24).toByte(), (this ushr 16).toByte(),
+        (this ushr 8).toByte(), this.toByte()
+    ).toMutableList()
+
+fun Long.toByteArrayAsVarLong(): MutableList<Byte> {
     var bvalue = this
     val result = mutableListOf<Byte>()
     do {
@@ -204,6 +243,12 @@ fun Long.toByteArray(): MutableList<Byte> {
     } while (bvalue != 0L)
     return result
 }
+
+fun Long.toByteArray(): MutableList<Byte> = byteArrayOf(
+    (this ushr 56).toByte(), (this ushr 48).toByte(),
+    (this ushr 40).toByte(), (this ushr 32).toByte(), (this ushr 24).toByte(),
+    (this ushr 16).toByte(), (this ushr 8).toByte(), this.toByte()
+).toMutableList()
 
 fun UUID.toByteArray(): ByteArray {
     val bb: ByteBuffer = ByteBuffer.wrap(ByteArray(16))

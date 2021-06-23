@@ -1,73 +1,54 @@
 package de.crash.mc.world
 
 import de.crash.mc.nbt.*
-import de.crash.mc.player.Gamemode
-import de.crash.mc.world.dimension.Level
+import de.crash.mc.world.dimension.DimensionType
+import de.crash.mc.world.generator.BiomeSourceType
+import de.crash.mc.world.generator.GeneratorSettings
+import de.crash.netty.packets.Packet
+import de.crash.util.toMCEnumString
 import me.nullicorn.nedit.type.NBTCompound
 import java.io.File
 import java.util.*
 
 class World
-internal constructor(nbtCompound: NBTCompound, worldFolder: File) {
-    val baseName: String
-    val difficulty: Difficulty
-    val gameType: Gamemode
-    val gamerules: Gamerules
-    val levels = mutableListOf<Level>()
+internal constructor(nbtCompound: NBTCompound, worldFolder: File, val name: String) {
     val seed: Long
-    val generateStructures: Boolean
     val bonusChest: Boolean
-    val hardcore: Boolean
-    val difficultyLocked: Boolean
     val worldBorder: Worldborder
     var time: Long
     var dayTime: Long
     var wanderingTraderSpawnChance: Int
     var wanderingTraderSpawnDelay: Int
-    var allowCommands: Boolean
     val weather: Weather
     var spawnLoc: Location
+    val type: DimensionType
+    val genSettings: GeneratorSettings
+    val biomeSourceType: BiomeSourceType
+    val largeBiomes: Boolean
 
     init {
         nbtCompound.run {
-            baseName = getString("LevelName", "world")
-            difficulty = when(getByte("Difficulty", 2)){
-                0.toByte() -> Difficulty.PEACEFUL
-                1.toByte() -> Difficulty.EASY
-                2.toByte() -> Difficulty.NORMAL
-                3.toByte() -> Difficulty.HARD
-                else -> Difficulty.NORMAL
-            }
-            gameType = when(getInt("GameType")){
-                0 -> Gamemode.SURVIVAL
-                1 -> Gamemode.CREATIVE
-                2 -> Gamemode.ADVENTURE
-                3 -> Gamemode.SPECTATOR
-                else -> Gamemode.SURVIVAL
-            }
-            gamerules = Gamerules(getCompound("GameRules"))
             val worldGenCompound = getCompound("WorldGenSettings")
             bonusChest = worldGenCompound.getByte("bonus_chest").asBoolean()
             seed = worldGenCompound.getLong("seed", Random().nextLong())
-            generateStructures = worldGenCompound.getByte("generate_features", 1).asBoolean()
-            hardcore = getByte("hardcore").asBoolean()
-            difficultyLocked = getByte("DifficultyLocked").asBoolean()
-            val dimensionsCompound = worldGenCompound.getCompound("dimensions")
-            dimensionsCompound.forEach {
-                levels.add(Level(dimensionsCompound.getCompound(it.key), this@World))
-            }
+            val worldDimensionCompound = worldGenCompound.getCompound("dimensions").getCompound(name)
+            type = DimensionType.valueOf(worldDimensionCompound.getString("type", "minecraft:overworld").toMCEnumString())
+            val generatorCompound = worldDimensionCompound.getCompound("generator")
+            genSettings = GeneratorSettings.valueOf(generatorCompound.getString("settings", "minecraft:overworld").toMCEnumString())
+            val biomeSourceCompound = generatorCompound.getCompound("biome_source")
+            biomeSourceType = BiomeSourceType.valueOf(biomeSourceCompound.getString("type", "minecraft:vanilla_layered").toMCEnumString())
+            largeBiomes = biomeSourceCompound.getByte("large_biomes").asBoolean()
             worldBorder = Worldborder(this)
             time = getLong("Time")
             wanderingTraderSpawnChance = getInt("WanderingTraderSpawnChance")
             wanderingTraderSpawnDelay = getInt("WanderingTraderSpawnDelay", 24000)
-            allowCommands = getByte("allowCommands").asBoolean()
             dayTime = getLong("DayTime")
             weather = Weather(this)
             val spawnX = getInt("SpawnX")
             val spawnY = getInt("SpawnY", 70)
             val spawnZ = getInt("SpawnZ")
-            val spawnAngle = getFloat("SpawnAngle", 0.0F)
-            spawnLoc = Location(this@World.levels[0]!!, spawnX.toDouble(), spawnY.toDouble(), spawnZ.toDouble(), spawnAngle, 0F)
+            val spawnAngle = getFloat("SpawnAngle")
+            spawnLoc = Location(this@World, spawnX.toDouble(), spawnY.toDouble(), spawnZ.toDouble(), spawnAngle, 0F)
             //val dragonFightCompound = getCompound("DragonFight")
             //val dragonFightGateways = mutableListOf<Int>()
             //dragonFightCompound.getList("Gateways").forEachInt { dragonFightGateways.add(it) }

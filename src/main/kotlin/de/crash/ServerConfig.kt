@@ -3,7 +3,8 @@ package de.crash
 import kotlin.system.exitProcess
 
 data class PropertiesObj(val port: Int, val server_ip: String, val online_mode: Boolean, val pvp: Boolean, val maxPlayers: Int, val whitelist: Boolean,
-    val motd: String, val viewDistance: Int, val defaultWorldName: String, val defaultGamemode: Byte, val seed: Long)
+    val motd: String, val viewDistance: Int, val defaultWorldName: String, val defaultGamemode: Byte, val seed: Long, val allowCommands: Boolean,
+    val genStructures: Boolean)
 
 internal val defaultConfig = PropertiesObj(
     port = 25565,
@@ -16,7 +17,9 @@ internal val defaultConfig = PropertiesObj(
     viewDistance = 8,
     defaultWorldName = "world",
     defaultGamemode = 1,
-    seed = 5859195333423694798
+    seed = 5859195333423694798,
+    allowCommands = true,
+    genStructures = true
 )
 
 var Config: PropertiesObj = defaultConfig
