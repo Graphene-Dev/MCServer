@@ -43,13 +43,9 @@ object WorldLoader {
                         if(rawInt == 0) continue
                         val offset = rawInt shr 8 and 0xFFFFFF
                         val size = rawInt and 0xFF
-                        println("Chunk Offset: $offset; Chunk Size: $size")
                     }
                     for (i in 0..1023){
                         val epochSeconds = bytePacket.readInt().toLong()
-                        if(epochSeconds == 0L) continue
-                        val instant = Instant.ofEpochSecond(epochSeconds)
-                        println(SimpleDateFormat.getTimeInstance().format(Date.from(instant)))
                     }
                 }
                 Server.worlds[it.key] = world
