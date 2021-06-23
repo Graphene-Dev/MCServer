@@ -6,7 +6,7 @@ plugins {
     application
 }
 
-group = "de.crash"
+group = "org.graphenedev"
 version = "0.0.1"
 
 repositories {
@@ -31,5 +31,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("de.crash.StartServerKt")
+    mainClass.set("org.graphenedev.StartServerKt")
 }
