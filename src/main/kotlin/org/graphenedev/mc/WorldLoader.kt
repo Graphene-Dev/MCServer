@@ -1,14 +1,15 @@
 package org.graphenedev.mc
 
 import me.nullicorn.nedit.NBTReader
+import me.nullicorn.nedit.NBTWriter
+import me.nullicorn.nedit.type.NBTCompound
 import org.graphenedev.mc.world.Gamerules
 import org.graphenedev.mc.world.World
 import org.graphenedev.mc.world.dimension.DimensionType
 import org.graphenedev.netty.packets.Packet
+import org.graphenedev.util.GZip
+import org.graphenedev.util.ZLib
 import java.io.File
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.util.*
 
 object WorldLoader {
     fun load(){
@@ -26,9 +27,9 @@ object WorldLoader {
             val levelDat = File(worldFolder.path + "/level.dat")
             val compound = NBTReader.readFile(levelDat).getCompound("Data")
             Server.gamerules = Gamerules(compound.getCompound("GameRules"))
-            compound.getCompound("WorldGenSettings").getCompound("dimensions").forEach {
-                println("Loading world \"${it.key}\"...")
-                val world = World(compound, worldFolder, it.key)
+            compound.getCompound("WorldGenSettings").getCompound("dimensions").forEach { entry ->
+                println("Loading world \"${entry.key}\"...")
+                val world = World(compound, worldFolder, entry.key)
                 val regionFolder = when {
                     world.type == DimensionType.THE_NETHER && File(worldFolder.path + "/DIM-1").exists() -> File(worldFolder.path + "/DIM-1/region")
                     else -> File(worldFolder.path + "/region")
@@ -39,17 +40,25 @@ object WorldLoader {
                     val posZ = nameArray[2].toInt()
                     val bytePacket = Packet(file.readBytes())
                     for (i in 0..1023){
+                        bytePacket.readPos = i*4
                         val rawInt = bytePacket.readInt()
                         if(rawInt == 0) continue
                         val offset = rawInt shr 8 and 0xFFFFFF
                         val size = rawInt and 0xFF
-                    }
-                    for (i in 0..1023){
+                        bytePacket.readPos = i*8
                         val epochSeconds = bytePacket.readInt().toLong()
+                        bytePacket.readPos = offset*4096
+                        val dataLength = bytePacket.readInt()
+                        val compressionType = bytePacket.readByte()
+                        val compressedBytes = bytePacket.readBytes(dataLength)
+                        val uncompressedBytes = when(compressionType){
+                            1.toByte() -> GZip.decompress(compressedBytes)
+                            else -> ZLib.decompress(compressedBytes)
+                        }
                     }
                 }
-                Server.worlds[it.key] = world
-                println("\"${it.key}\" loaded!")
+                Server.worlds[entry.key] = world
+                println("\"${entry.key}\" loaded!")
             }
         }catch (ex: Exception) {
             println("ERROR WHILE LOADING WORLD, REPORT IT TO THE DEVS WITH FOLLOWING STACKTRACE:\n")

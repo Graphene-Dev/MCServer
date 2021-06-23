@@ -7,8 +7,7 @@ object ZLib {
     fun decompress(compressedData: ByteArray): ByteArray{
         val decompresser = Inflater()
         decompresser.setInput(compressedData)
-        while (!decompresser.finished()) {}
-        val outputArray = ByteArray(decompresser.totalOut)
+        val outputArray = ByteArray(compressedData.size*5)
         decompresser.inflate(outputArray)
         decompresser.end()
         return outputArray
