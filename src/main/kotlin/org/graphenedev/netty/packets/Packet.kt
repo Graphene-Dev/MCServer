@@ -164,8 +164,8 @@ class Packet() {
 
     fun readInt(): Int {
         if(bytes.size > readPos) {
-            val result: Int = ((0xff and bytes[readPos].toInt()) shl 56 or ((0xff and bytes[readPos + 1].toInt()) shl 48
-                    ) or ((0xff and bytes[readPos + 2].toInt()) shl 40) or ((0xff and bytes[readPos + 3].toInt()) shl 32))
+            val result: Int = (0xff and bytes[readPos].toInt()) shl 56 or ((0xff and bytes[readPos + 1].toInt()) shl 48
+                    ) or ((0xff and bytes[readPos + 2].toInt()) shl 40) or ((0xff and bytes[readPos + 3].toInt()) shl 32)
             readPos += 4
             return result
         }else {
@@ -175,12 +175,12 @@ class Packet() {
 
     fun readLong(): Long {
         if(bytes.size > readPos) {
-            val result : Long = ((0xff and bytes[readPos].toInt()).toLong() shl 56 or ((0xff and bytes[readPos + 1].toInt()).toLong() shl 48
+            val result : Long = (0xff and bytes[readPos].toInt()).toLong() shl 56 or ((0xff and bytes[readPos + 1].toInt()).toLong() shl 48
                     ) or ((0xff and bytes[readPos + 2].toInt()).toLong() shl 40
                     ) or ((0xff and bytes[readPos + 3].toInt()).toLong() shl 32
                     ) or ((0xff and bytes[readPos + 4].toInt()).toLong() shl 24
                     ) or ((0xff and bytes[readPos + 5].toInt()).toLong() shl 16
-                    ) or ((0xff and bytes[readPos + 6].toInt()).toLong() shl 8) or ((0xff and bytes[readPos + 7].toInt()).toLong() shl 0))
+                    ) or ((0xff and bytes[readPos + 6].toInt()).toLong() shl 8) or ((0xff and bytes[readPos + 7].toInt()).toLong() shl 0)
             readPos += 8
             return result
         }else {
