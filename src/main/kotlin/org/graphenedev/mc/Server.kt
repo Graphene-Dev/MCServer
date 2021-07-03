@@ -36,7 +36,6 @@ object Server {
     internal fun serverTick(){
         loadWorlds()
         if(worlds.size == 0) {
-            println("No worlds found! There is no world generator implemented yet!")
             exitProcess(-1)
         }
         println("Worlds loaded!")

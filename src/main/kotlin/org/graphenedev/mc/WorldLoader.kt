@@ -1,15 +1,12 @@
 package org.graphenedev.mc
 
 import me.nullicorn.nedit.NBTReader
-import me.nullicorn.nedit.NBTWriter
-import me.nullicorn.nedit.type.NBTCompound
 import org.graphenedev.mc.world.Gamerules
 import org.graphenedev.mc.world.World
 import org.graphenedev.mc.world.dimension.DimensionType
 import org.graphenedev.netty.packets.Packet
 import org.graphenedev.util.GZip
 import org.graphenedev.util.ZLib
-import java.io.EOFException
 import java.io.File
 
 object WorldLoader {
@@ -56,10 +53,6 @@ object WorldLoader {
                             1.toByte() -> GZip.decompress(compressedBytes)
                             else -> ZLib.decompress(compressedBytes)
                         }
-                        try {
-                            val chunkCompound = NBTReader.read(uncompressedBytes.inputStream()).getCompound("Level")
-                            println("X: ${chunkCompound.getInt("xPos", -1)}; Z: ${chunkCompound.getInt("zPos", -1)}")
-                        }catch (ex: EOFException) {}
                     }
                 }
                 Server.worlds[entry.key] = world
